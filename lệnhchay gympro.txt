@@ -1,0 +1,14 @@
+# --- Hướng dẫn vận hành GymPro ---
+
+1. Bật XAMPP (Apache & MySQL)
+2. Chạy Server cục bộ:
+   php -S localhost:8000 -t public
+
+3. Truy cập Website:
+   http://localhost:8000
+
+# --- Lệnh Git hữu ích ---
+git pull origin develop
+git add .
+git commit -m "Cập nhật nội dung mới"
+git push origin develop
