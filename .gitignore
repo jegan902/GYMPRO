@@ -1,0 +1,17 @@
+# Database Config
+config/config.php
+
+# PHP Dependencies
+vendor/
+
+# Temporary / OS files
+.DS_Store
+Thumbs.db
+*.log
+tmp/
+.vscode/
+.idea/
+
+# Local Dev scripts
+*.php.bak
+*.sql.bak
