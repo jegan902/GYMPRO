@@ -110,14 +110,17 @@
                     </div>
                 </form>
 
-                <!-- Demo accounts
+                <!-- Demo accounts -->
                 <div class="mt-5 p-3 rounded-4 bg-light border border-dashed text-center">
-                    <p class="text-muted x-small mb-2"><i class="bi bi-info-circle me-1"></i> Tài khoản demo (click để điền):</p>
+                    <p class="text-muted x-small mb-2"><i class="bi bi-info-circle me-1"></i> Tài khoản demo (click để
+                        điền):</p>
                     <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-white btn-sm shadow-sm rounded-pill px-3 border" onclick="fillDemo('admin@gym.com', 'password')">Admin</button>
-                        <button class="btn btn-white btn-sm shadow-sm rounded-pill px-3 border" onclick="fillDemo('member@gym.com', 'password')">Member</button>
+                        <button class="btn btn-white btn-sm shadow-sm rounded-pill px-3 border"
+                            onclick="fillDemo('admin@gym.com', 'password')">Admin</button>
+                        <button class="btn btn-white btn-sm shadow-sm rounded-pill px-3 border"
+                            onclick="fillDemo('member@gym.com', 'password')">Member</button>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>

@@ -3,6 +3,8 @@
  * MemberModel
  * Handles member-related database operations
  */
+require_once APP_ROOT . '/app/models/UserModel.php';
+
 class MemberModel extends Model
 {
     protected $table = 'members';
