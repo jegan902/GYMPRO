@@ -3,6 +3,8 @@ using GymApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<GymApi.Services.IEmailService, GymApi.Services.EmailService>();
 
-// Configure MySQL
+// Configure SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<GymDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlServer(connectionString));
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -46,6 +49,21 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
+    var databaseCreator = dbContext.GetService<IRelationalDatabaseCreator>();
+    
+    try {
+        if (!databaseCreator.Exists()) databaseCreator.Create();
+        if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+    } catch (Exception ex) {
+        Console.WriteLine("Database initialization error: " + ex.Message);
+    }
+}
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

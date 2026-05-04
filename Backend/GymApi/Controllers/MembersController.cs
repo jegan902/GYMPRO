@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GymApi.Data;
-using GymApi.Models;
+using GymApi.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace GymApi.Controllers

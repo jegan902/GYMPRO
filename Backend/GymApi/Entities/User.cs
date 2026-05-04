@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GymApi.Models
+namespace GymApi.Entities
 {
     public enum UserRole
     {
@@ -52,6 +52,13 @@ namespace GymApi.Models
 
         [Column("last_login")]
         public DateTime? LastLogin { get; set; }
+
+        [MaxLength(6)]
+        [Column("otp_code")]
+        public string? OtpCode { get; set; }
+
+        [Column("otp_expiry")]
+        public DateTime? OtpExpiry { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

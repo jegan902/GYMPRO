@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GymApi.Models
+namespace GymApi.Entities
 {
     [Table("members")]
     public class Member

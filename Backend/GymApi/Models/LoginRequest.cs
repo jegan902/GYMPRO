@@ -1,4 +1,4 @@
-namespace GymApi.DTOs
+namespace GymApi.Models
 {
     public class LoginRequest
     {
