@@ -101,6 +101,7 @@ app.UseMiddleware<CorrelationIdMiddleware>();
 // app.UseMiddleware<ApiKeyAuthMiddleware>(); // Tạm đóng lại trên Development để test Swagger dễ dàng hơn
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

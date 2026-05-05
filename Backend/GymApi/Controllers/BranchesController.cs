@@ -53,7 +53,10 @@ namespace GymApi.Controllers
                     status = b.IsActive ? "active" : "inactive",
                     is_active = b.IsActive,
                     manager_id = b.ManagerId,
-                    manager = _context.Users.Where(u => u.Id == b.ManagerId).Select(u => u.FullName).FirstOrDefault() ?? "Chưa có quản lý",
+                    manager = _context.Users.Where(u => u.Id == b.ManagerId)
+                        .Select(u => (u.Email == "admin@gympro.com" && string.IsNullOrEmpty(u.FullName)) ? "Nguyễn Văn Admin" : (u.FullName ?? "Chưa có quản lý"))
+                        .FirstOrDefault()?.Trim() ?? "Chưa có quản lý",
+                    manager_avatar = _context.Users.Where(u => u.Id == b.ManagerId).Select(u => u.Avatar).FirstOrDefault(),
                     members_count = mCount,
                     revenue = revAmount.ToString("N0") + " VNĐ"
                 });

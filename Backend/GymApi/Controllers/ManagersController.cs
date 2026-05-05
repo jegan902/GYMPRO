@@ -37,13 +37,14 @@ namespace GymApi.Controllers
 
                 result.Add(new {
                     id = u.Id,
-                    full_name = u.FullName,
+                    full_name = (u.Email == "admin@gympro.com" && string.IsNullOrEmpty(u.FullName)) ? "Nguyễn Văn Admin" : (u.FullName?.Trim() ?? "Quản trị viên"),
                     email = u.Email,
                     role = u.Role,
                     role_id = u.RoleId,
                     role_name = _context.Roles.Where(r => r.Id == u.RoleId).Select(r => r.Name).FirstOrDefault() ?? u.Role,
                     branch_id = u.BranchId,
                     branch_name = u.BranchId == 1 ? "Toàn hệ thống" : (branches.FirstOrDefault(b => b.Id == u.BranchId)?.Name ?? "Toàn hệ thống"),
+                    avatar = u.Avatar,
                     is_active = u.IsActive,
                     created_at = u.CreatedAt
                 });

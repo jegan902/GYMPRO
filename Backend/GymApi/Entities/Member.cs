@@ -30,6 +30,9 @@ namespace GymApi.Entities
         [Column("bmi")]
         public decimal? Bmi { get; set; }
 
+        [Column("body_fat")]
+        public decimal? BodyFat { get; set; }
+
         [Column("address")]
         public string? Address { get; set; }
 
@@ -49,5 +52,16 @@ namespace GymApi.Entities
 
         [Column("notes")]
         public string? Notes { get; set; }
+
+        [MaxLength(50)]
+        [Column("nationality")]
+        public string? Nationality { get; set; }
+
+        [MaxLength(20)]
+        [Column("id_card")]
+        public string? IdCard { get; set; }
+
+        [Column("pt_sessions")]
+        public int PtSessions { get; set; } = 0;
     }
 }

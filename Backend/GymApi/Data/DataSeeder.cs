@@ -84,11 +84,11 @@ namespace GymApi.Data
             }
 
             // 5. User
-            // 1. Đảm bảo thực thể Hệ thống (HQ) luôn là ID 1
-            var systemHq = context.Branches.FirstOrDefault(b => b.Id == 1);
+            // 1. Đảm bảo thực thể Hệ thống (HQ) luôn tồn tại
+            var systemHq = context.Branches.OrderBy(b => b.Id).FirstOrDefault();
             if (systemHq == null)
             {
-                systemHq = new Branch { Id = 1, Name = "Hệ thống (HQ)", Address = "Toàn hệ thống", Phone = "N/A", IsActive = true };
+                systemHq = new Branch { Name = "Hệ thống (HQ)", Address = "Toàn hệ thống", Phone = "N/A", IsActive = true };
                 context.Branches.Add(systemHq);
                 context.SaveChanges();
             }

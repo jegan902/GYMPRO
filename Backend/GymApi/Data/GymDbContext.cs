@@ -49,7 +49,7 @@ namespace GymApi.Data
 
         // Misc
         public DbSet<ExerciseLog> ExerciseLogs { get; set; }
-        // BodyMetrics đã được thay thế bằng HealthMetrics
+        public DbSet<BodyMetric> BodyMetrics { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
