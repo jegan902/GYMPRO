@@ -7,12 +7,13 @@
     <title>GYMPRO | Hệ Thống Quản Lý Phòng Gym Thông Minh</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-color: #FF5E00;
             --secondary-color: #E65500;
-            --accent-color: #1A1A2E;
+            --accent-color: #ffffffff;
             --orange-gradient: linear-gradient(135deg, #FF7A00 0%, #FF4D00 100%);
             --glass-white: rgba(255, 255, 255, 0.15);
             --text-main: #FFFFFF;
@@ -178,16 +179,21 @@
                 <div class="col-lg-7 text-center text-lg-start">
                     <span class="badge rounded-pill badge-premium px-3 py-2 mb-4">HỆ THỐNG QUẢN LÝ SMART FITNESS</span>
                     <h1 class="display-1">Khai Phá Tiềm Năng<br>Của Bạn</h1>
-                    <p class="lead mb-5 fs-4">GymPro kết hợp trí tuệ nhân tạo và quản lý vận hành tối ưu, giúp hành trình chinh phục vóc dáng của bạn trở nên khoa học hơn bao giờ hết.</p>
+                    <p class="lead mb-5 fs-4">GymPro kết hợp trí tuệ nhân tạo và quản lý vận hành tối ưu, giúp hành
+                        trình chinh phục vóc dáng của bạn trở nên khoa học hơn bao giờ hết.</p>
                     <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-                        <a href="{{ route('login') }}" class="btn btn-premium btn-white-premium">Bắt đầu ngay <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="{{ route('login') }}" class="btn btn-premium btn-white-premium">Bắt đầu ngay <i
+                                class="bi bi-arrow-right ms-2"></i></a>
                         <a href="#features" class="btn btn-premium btn-outline-white">Tìm hiểu thêm</a>
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block">
                     <div class="position-relative">
-                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-10 rounded-4 rotate-3"></div>
-                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="Gym" class="img-fluid rounded-4 shadow-2xl relative z-1" style="filter: brightness(1.1) contrast(1.1);">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-10 rounded-4 rotate-3">
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop"
+                            alt="Gym" class="img-fluid rounded-4 shadow-2xl relative z-1"
+                            style="filter: brightness(1.1) contrast(1.1);">
                     </div>
                 </div>
             </div>
@@ -198,21 +204,24 @@
                     <div class="feature-card">
                         <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
                         <h4 class="fw-bold mb-3">Theo Dõi Chỉ Số</h4>
-                        <p class="opacity-75">Tự động tính toán BMI, BMR, TDEE và gợi ý dinh dưỡng theo thời gian thực.</p>
+                        <p class="opacity-75">Tự động tính toán BMI, BMR, TDEE và gợi ý dinh dưỡng theo thời gian thực.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
                         <div class="feature-icon"><i class="bi bi-calendar-check"></i></div>
                         <h4 class="fw-bold mb-3">Giáo Án Tập Luyện</h4>
-                        <p class="opacity-75">Hàng trăm bài tập được thiết kế riêng cho từng cấp độ và mục tiêu cá nhân.</p>
+                        <p class="opacity-75">Hàng trăm bài tập được thiết kế riêng cho từng cấp độ và mục tiêu cá nhân.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
                         <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
                         <h4 class="fw-bold mb-3">Quản Lý Chuyên Nghiệp</h4>
-                        <p class="opacity-75">Quản lý hội viên, gói tập và hóa đơn với hệ thống bảo mật JWT hàng đầu.</p>
+                        <p class="opacity-75">Quản lý hội viên, gói tập và hóa đơn với hệ thống bảo mật JWT hàng đầu.
+                        </p>
                     </div>
                 </div>
             </div>

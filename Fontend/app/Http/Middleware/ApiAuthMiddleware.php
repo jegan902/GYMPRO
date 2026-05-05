@@ -17,7 +17,7 @@ class ApiAuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Session::has('api_token')) {
-            return redirect('/login')->withErrors(['email' => 'Vui lòng đăng nhập để tiếp tục.']);
+            return redirect()->guest('/login')->withErrors(['email' => 'Vui lòng đăng nhập để tiếp tục.']);
         }
 
         return $next($request);

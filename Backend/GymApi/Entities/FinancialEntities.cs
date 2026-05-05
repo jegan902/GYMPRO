@@ -5,12 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GymApi.Entities
 {
     [Table("packages")]
-    public class Package
+    public class Package : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(100)]
         [Column("name")]
@@ -30,21 +26,11 @@ namespace GymApi.Entities
 
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 
-    [Table("member_packages")]
-    public class MemberPackage
+    [Table("subscriptions")]
+    public class Subscription : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
         [Required]
         [Column("member_id")]
         public int MemberId { get; set; }
@@ -66,25 +52,17 @@ namespace GymApi.Entities
         public DateTime? EndDate { get; set; }
 
         [Column("status")]
-        public string Status { get; set; } = "pending";
+        [MaxLength(20)]
+        public string Status { get; set; } = "pending"; // active, expired, paused, cancelled
 
         [Column("payment_status")]
+        [MaxLength(20)]
         public string PaymentStatus { get; set; } = "pending";
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 
     [Table("invoices")]
-    public class Invoice
+    public class Invoice : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
         [Required]
         [Column("member_id")]
         public int MemberId { get; set; }
@@ -92,35 +70,50 @@ namespace GymApi.Entities
         [ForeignKey("MemberId")]
         public Member? Member { get; set; }
 
-        [Column("package_id")]
-        public int? PackageId { get; set; }
+        [Column("subscription_id")]
+        public int? SubscriptionId { get; set; }
 
-        [ForeignKey("PackageId")]
-        public Package? Package { get; set; }
+        [ForeignKey("SubscriptionId")]
+        public Subscription? Subscription { get; set; }
+
+        [Column("amount")]
+        public decimal Amount { get; set; }
+
+        [Column("status")]
+        [MaxLength(20)]
+        public string Status { get; set; } = "pending"; // pending, paid, cancelled
+
+        [Column("notes")]
+        public string? Notes { get; set; }
+    }
+
+    [Table("payments")]
+    public class Payment : BaseEntity
+    {
+        [Required]
+        [Column("invoice_id")]
+        public int InvoiceId { get; set; }
+
+        [ForeignKey("InvoiceId")]
+        public Invoice? Invoice { get; set; }
 
         [Column("amount")]
         public decimal Amount { get; set; }
 
         [Column("payment_method")]
+        [MaxLength(50)]
         public string PaymentMethod { get; set; } = "cash";
-
-        [Column("payment_date")]
-        public DateTime? PaymentDate { get; set; }
-
-        [Column("status")]
-        public string Status { get; set; } = "pending";
 
         [MaxLength(100)]
         [Column("transaction_id")]
         public string? TransactionId { get; set; }
 
-        [Column("notes")]
-        public string? Notes { get; set; }
+        [MaxLength(100)]
+        [Column("idempotency_key")]
+        public string? IdempotencyKey { get; set; } // Chống thanh toán đúp
 
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        [Column("status")]
+        [MaxLength(20)]
+        public string Status { get; set; } = "success"; 
     }
 }

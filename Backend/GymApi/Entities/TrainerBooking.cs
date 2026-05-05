@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GymApi.Entities
 {
     [Table("trainer_bookings")]
-    public class TrainerBooking
+    public class TrainerBooking : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
 
         [Required]
         [Column("member_id")]
@@ -44,10 +41,8 @@ namespace GymApi.Entities
         [Column("status")]
         public string Status { get; set; } = "pending";
 
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        [MaxLength(100)]
+        [Column("idempotency_key")]
+        public string? IdempotencyKey { get; set; } // Chống double-booking
     }
 }

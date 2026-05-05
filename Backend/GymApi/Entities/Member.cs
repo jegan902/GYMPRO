@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GymApi.Entities
 {
     [Table("members")]
-    public class Member
+    public class Member : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
 
         [Required]
         [Column("user_id")]
@@ -52,11 +49,5 @@ namespace GymApi.Entities
 
         [Column("notes")]
         public string? Notes { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

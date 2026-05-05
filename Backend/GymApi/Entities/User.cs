@@ -6,18 +6,25 @@ namespace GymApi.Entities
 {
     public enum UserRole
     {
-        admin,
-        staff,
+        superadmin,
+        branchadmin,
+        staff_pt,
         member,
         user
     }
 
     [Table("users")]
-    public class User
+    public class User : BaseEntity
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
+        [Column("branch_id")]
+        public int? BranchId { get; set; }
+        [ForeignKey("BranchId")]
+        public Branch? Branch { get; set; }
+
+        [Column("role_id")]
+        public int? RoleId { get; set; }
+        [ForeignKey("RoleId")]
+        public Role? RoleNavigation { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -59,11 +66,5 @@ namespace GymApi.Entities
 
         [Column("otp_expiry")]
         public DateTime? OtpExpiry { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

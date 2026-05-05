@@ -90,13 +90,18 @@ namespace GymApi.Controllers
                 return BadRequest(new { message = "Email already registered" });
             }
 
+            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+            var hqBranch = await _context.Branches.FirstOrDefaultAsync(); // Thường là HQ ID=1
+
             var user = new User
             {
                 Email = email,
                 Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 FullName = request.FullName,
                 Phone = request.Phone,
-                Role = request.Role,
+                Role = "user", // Mặc định là user để đợi xét duyệt
+                RoleId = userRole?.Id,
+                BranchId = hqBranch?.Id,
                 IsActive = true,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
@@ -141,11 +146,13 @@ namespace GymApi.Controllers
 
             var token = GenerateJwtToken(user);
 
+            var roleName = await _context.Roles.Where(r => r.Id == user.RoleId).Select(r => r.Name).FirstOrDefaultAsync() ?? user.Role;
+
             return Ok(new AuthResponse
             {
                 Token = token,
                 FullName = user.FullName,
-                Role = user.Role
+                Role = roleName
             });
         }
 

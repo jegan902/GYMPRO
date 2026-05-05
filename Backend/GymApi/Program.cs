@@ -5,6 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using GymApi.Middlewares;
+using GymApi.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GymApi.Services.IEmailService, GymApi.Services.EmailService>();
+
+// Configure Phase 3 Services (Booking & Notification)
+builder.Services.AddScoped<GymApi.Services.INotificationService, GymApi.Services.NotificationService>();
+builder.Services.AddScoped<GymApi.Services.IClassBookingService, GymApi.Services.ClassBookingService>();
+
+// Configure Phase 4 Services (Smart Health, AI Pipeline, DLQ)
+builder.Services.AddScoped<GymApi.Services.IHealthMetricService, GymApi.Services.HealthMetricService>();
+builder.Services.AddScoped<GymApi.Services.IMessageBus, GymApi.Services.MockMessageBus>();
+builder.Services.AddHostedService<GymApi.Services.DataRetentionJob>();
+
+// Configure Advanced RBAC (Permission-based)
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+// Configure Billing Engine Background Jobs
+builder.Services.AddHostedService<GymApi.Services.SubscriptionStatusJob>();
 
 // Configure SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -58,6 +77,9 @@ using (var scope = app.Services.CreateScope())
     try {
         if (!databaseCreator.Exists()) databaseCreator.Create();
         if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+
+        // Tự động Seed dữ liệu gốc (Roles, Permissions, Admin)
+        DataSeeder.SeedData(dbContext);
     } catch (Exception ex) {
         Console.WriteLine("Database initialization error: " + ex.Message);
     }
@@ -73,6 +95,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
+
+// Bổ sung Middlewares bảo mật và theo dõi
+app.UseMiddleware<CorrelationIdMiddleware>();
+// app.UseMiddleware<ApiKeyAuthMiddleware>(); // Tạm đóng lại trên Development để test Swagger dễ dàng hơn
 
 app.UseHttpsRedirection();
 
