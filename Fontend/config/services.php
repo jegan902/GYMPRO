@@ -36,7 +36,8 @@ return [
     ],
 
     'backend' => [
-        'url' => env('BACKEND_API_URL', 'http://localhost:5000/api'),
+        'url' => env('BACKEND_API_URL', 'http://127.0.0.1:5083/api'),
+        'url_base' => env('BACKEND_URL', 'http://127.0.0.1:5083'),
     ],
 
 ];

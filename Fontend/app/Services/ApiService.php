@@ -11,7 +11,7 @@ class ApiService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.backend.url', 'http://localhost:5000/api');
+        $this->baseUrl = 'http://127.0.0.1:5083/api';
     }
 
     protected function getHeaders()

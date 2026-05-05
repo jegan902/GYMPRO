@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -18,6 +19,9 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::any('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', function () {
+    if (in_array(session('user_role'), ['Super Admin', 'Branch Admin'])) {
+        return redirect()->route('admin.dashboard');
+    }
     return "Welcome to Dashboard! (User: " . session('user_name') . ")";
 })->middleware('auth.api');
 
@@ -35,5 +39,8 @@ Route::prefix('admin')->middleware('auth.api')->group(function () {
     Route::put('/managers/{id}', [AdminController::class, 'updateManager'])->name('admin.managers.update');
     Route::delete('/managers/{id}', [AdminController::class, 'deleteManager'])->name('admin.managers.delete');
     Route::post('/managers/{id}/toggle', [AdminController::class, 'toggleManager'])->name('admin.managers.toggle');
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
 });
 

@@ -22,13 +22,13 @@
 
     .table-glass td {
         background: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         padding: 15px;
-        color: #E2E2E2;
+        color: #475569;
     }
 
     .table-glass tbody tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(0, 0, 0, 0.02);
     }
 </style>
 @endpush
@@ -82,9 +82,15 @@
                         <td class="fw-bold text-muted">#{{ str_pad($manager['id'], 3, '0', STR_PAD_LEFT) }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($manager['full_name']) }}&background=random" alt="Avatar" class="rounded-circle" width="38" height="38">
+                                @php
+                                    $avatar = $manager['avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($manager['full_name']) . '&background=F39C12&color=fff');
+                                    if (str_starts_with($avatar, '/')) {
+                                        $avatar = config('services.backend.url_base') . $avatar;
+                                    }
+                                @endphp
+                                <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle" width="38" height="38" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
                                 <div>
-                                    <div class="fw-bold text-white">{{ $manager['full_name'] }}</div>
+                                    <div class="fw-bold" style="color: #1e293b;">{{ !empty($manager['full_name']) ? $manager['full_name'] : 'Quản trị viên' }}</div>
                                     <div class="small text-muted">{{ $manager['email'] }}</div>
                                 </div>
                             </div>
@@ -95,7 +101,7 @@
                             </span>
                         </td>
                         <td>
-                            <div class="text-white"><i class="bi bi-building me-1"></i> {{ $manager['branch_name'] }}</div>
+                            <div style="color: #1e293b;"><i class="bi bi-building me-1"></i> {{ $manager['branch_name'] }}</div>
                         </td>
                         <td>
                             <div class="form-check form-switch fs-5">

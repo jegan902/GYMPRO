@@ -22,13 +22,13 @@
 
     .table-glass td {
         background: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         padding: 15px;
-        color: #E2E2E2;
+        color: #475569;
     }
 
     .table-glass tbody tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(0, 0, 0, 0.02);
     }
 
     /* Custom Switch Toggle */
@@ -96,7 +96,7 @@
                     <tr>
                         <td class="fw-bold text-muted">#{{ str_pad($branch['id'], 3, '0', STR_PAD_LEFT) }}</td>
                         <td>
-                            <div class="fw-bold text-white">{{ $branch['name'] }}</div>
+                            <div class="fw-bold" style="color: #1e293b;">{{ $branch['name'] }}</div>
                             <div class="small text-muted"><i class="bi bi-geo-alt-fill me-1"></i>{{ $branch['address'] }}</div>
                         </td>
                         <td>
@@ -104,8 +104,16 @@
                                 <span class="badge bg-secondary text-light">Chưa có quản lý</span>
                             @else
                                 <div class="d-flex align-items-center gap-2">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($branch['manager']) }}&background=random" alt="Manager" class="rounded-circle" width="30" height="30">
-                                    <span class="text-white">{{ $branch['manager'] }}</span>
+                                    @php
+                                        $mAvatar = $branch['manager_avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($branch['manager']) . '&background=F1C40F&color=fff');
+                                        if (str_starts_with($mAvatar, '/')) {
+                                            $mAvatar = config('services.backend.url_base') . $mAvatar;
+                                        }
+                                    @endphp
+                                    <img src="{{ $mAvatar }}" alt="Manager" class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid rgba(0,0,0,0.1);">
+                                    <span class="fw-bold" style="font-size: 0.9rem; color: #1e293b;">
+                                        {{ !empty($branch['manager']) ? $branch['manager'] : 'Quản trị viên' }}
+                                    </span>
                                 </div>
                             @endif
                         </td>

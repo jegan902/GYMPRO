@@ -2,132 +2,210 @@
 
 @section('title', 'Tổng Quan Hệ Thống')
 
+@push('styles')
+<style>
+    :root {
+        --dash-bg: #f8f9fa;
+        --card-bg: #ffffff;
+        --orange-main: #FF5E00;
+        --text-main: #1a1d23;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+    }
+
+    .dashboard-wrapper {
+        background-color: var(--dash-bg);
+        min-height: 100vh;
+        padding: 24px;
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-card:hover {
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
+        border-color: var(--orange-main);
+        transform: translateY(-5px);
+    }
+
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .icon-orange { background: #fff7ed; color: var(--orange-main); }
+    .icon-green { background: #f0fdf4; color: #16a34a; }
+    .icon-blue { background: #f0f9ff; color: #0284c7; }
+    .icon-red { background: #fef2f2; color: #dc2626; }
+
+    .chart-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    }
+
+    .alert-item {
+        display: flex;
+        align-items: center;
+        padding: 14px;
+        background: #f8f9fa;
+        border-radius: 18px;
+        margin-bottom: 10px;
+        border: 1px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .alert-item:hover {
+        border-color: var(--orange-main);
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        transform: translateX(5px);
+    }
+
+    .export-btn {
+        background: var(--orange-main);
+        color: #fff;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        box-shadow: 0 10px 15px rgba(255, 94, 0, 0.2);
+    }
+
+    .export-btn:hover {
+        background: #ea580c;
+        transform: translateY(-2px);
+        box-shadow: 0 15px 20px rgba(255, 94, 0, 0.3);
+    }
+
+    .badge-soft {
+        background: #f0fdf4;
+        color: #16a34a;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+    
+    .text-dim { color: var(--text-muted); }
+</style>
+@endpush
+
 @section('content')
-<div class="container-fluid p-0">
-    <!-- Tiêu đề -->
-    <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
-        <div>
-            <h2 class="fw-bold mb-1">Dashboard</h2>
-            <p class="text-muted mb-0">Theo dõi hoạt động kinh doanh và trạng thái AI hôm nay.</p>
-        </div>
-        <div>
-            <button class="btn btn-primary" onclick="alert('Đang trích xuất báo cáo ra file Excel...')" style="background: var(--primary-color); border: none; border-radius: 10px; padding: 10px 20px;">
-                <i class="bi bi-cloud-download me-2"></i> Xuất Báo Cáo
+<div class="dashboard-wrapper">
+    <div class="container-fluid p-0">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h5 class="fw-bold mb-1">Dashboard</h5>
+                <p class="text-dim small mb-0">Hệ thống đang hoạt động ổn định.</p>
+            </div>
+            <button class="export-btn">
+                <i class="bi bi-arrow-down-short fs-5"></i> Xuất Báo Cáo
             </button>
         </div>
-    </div>
 
-    <!-- KPI Cards -->
-    <div class="row g-4 mb-4">
-        <!-- Card 1 -->
-        <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="glass-card h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.8rem;">Tổng Hội Viên Active</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($kpi['total_members'] ?? 1254) }}</h3>
+        <!-- KPI Grid -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="icon-box icon-orange"><i class="bi bi-people-fill"></i></div>
+                        <span class="badge-soft">+12%</span>
                     </div>
-                    <div class="p-3 rounded-3" style="background: rgba(255,94,0,0.15); color: var(--primary-color);">
-                        <i class="bi bi-people-fill fs-4"></i>
-                    </div>
+                    <div class="text-dim fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">Tổng Hội Viên</div>
+                    <div class="h4 fw-bold mb-0 text-main">{{ number_format($kpi['total_members'] ?? 1254) }}</div>
                 </div>
-                <div class="text-success small fw-bold">
-                    <i class="bi bi-arrow-up-right"></i> +12.5% <span class="text-muted fw-normal">so với tháng trước</span>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="icon-box icon-green"><i class="bi bi-wallet2"></i></div>
+                        <span class="badge-soft">+8.2%</span>
+                    </div>
+                    <div class="text-dim fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">Doanh Thu</div>
+                    <div class="h4 fw-bold mb-0 text-main">{{ number_format($kpi['monthly_revenue'] ?? 45000000) }} đ</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="icon-box icon-blue"><i class="bi bi-calendar-check"></i></div>
+                        <span class="text-dim small" style="font-size: 0.65rem;">80% Full</span>
+                    </div>
+                    <div class="text-dim fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">Lớp Học</div>
+                    <div class="h4 fw-bold mb-0 text-main">{{ $kpi['today_classes'] ?? 24 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="icon-box icon-red"><i class="bi bi-heart-pulse-fill"></i></div>
+                        <span class="badge bg-danger rounded-pill" style="font-size: 0.6rem; padding: 2px 6px;">3 KHẨN CẤP</span>
+                    </div>
+                    <div class="text-dim fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">Cảnh Báo AI</div>
+                    <div class="h4 fw-bold mb-0 text-danger">{{ $kpi['medical_alerts'] ?? 3 }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.2s;">
-            <div class="glass-card h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.8rem;">Doanh Thu (Tháng)</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($kpi['monthly_revenue'] ?? 0) }} đ</h3>
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="chart-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="fw-bold mb-0 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.8rem;">Hiệu Suất Kinh Doanh</h6>
+                        <select class="form-select form-select-sm w-auto border-0 bg-light text-dim" style="font-size: 0.75rem;">
+                            <option>Tháng này</option>
+                        </select>
                     </div>
-                    <div class="p-3 rounded-3" style="background: rgba(40,167,69,0.15); color: #28a745;">
-                        <i class="bi bi-currency-dollar fs-4"></i>
+                    <div style="height: 300px;">
+                        <canvas id="revenueChart"></canvas>
                     </div>
-                </div>
-                <div class="text-success small fw-bold">
-                    <i class="bi bi-arrow-up-right"></i> +8.2% <span class="text-muted fw-normal">so với tháng trước</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.3s;">
-            <div class="glass-card h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.8rem;">Lớp Học Hôm Nay</h6>
-                        <h3 class="fw-bold mb-0">{{ $kpi['today_classes'] ?? 24 }}</h3>
-                    </div>
-                    <div class="p-3 rounded-3" style="background: rgba(23,162,184,0.15); color: #17a2b8;">
-                        <i class="bi bi-calendar-event fs-4"></i>
-                    </div>
-                </div>
-                <div class="text-warning small fw-bold">
-                    <i class="bi bi-exclamation-circle"></i> 5 lớp <span class="text-muted fw-normal">đã kín chỗ (có Waitlist)</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 4 (AI Specific) -->
-        <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.4s;">
-            <div class="glass-card h-100" style="border-color: rgba(255,51,102,0.3); background: linear-gradient(145deg, var(--card-bg) 0%, rgba(255,51,102,0.05) 100%);">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h6 class="text-danger text-uppercase fw-bold mb-1" style="letter-spacing: 1px; font-size: 0.8rem;">Medical Alerts (DLQ)</h6>
-                        <h3 class="fw-bold text-danger mb-0">{{ $kpi['medical_alerts'] ?? 3 }}</h3>
-                    </div>
-                    <div class="p-3 rounded-3" style="background: rgba(255,51,102,0.15); color: #FF3366;">
-                        <i class="bi bi-heart-pulse-fill fs-4 animate-pulse"></i>
-                    </div>
-                </div>
-                <div class="text-danger small fw-bold">
-                    Cần xử lý khẩn cấp!
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts & Tables -->
-    <div class="row g-4 mb-4">
-        <!-- Main Chart -->
-        <div class="col-12 col-xl-8 animate-fade-in" style="animation-delay: 0.5s;">
-            <div class="glass-card h-100">
-                <h5 class="fw-bold mb-4">Tăng Trưởng Doanh Thu & Booking</h5>
-                <div style="height: 300px;">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Medical Alerts Table -->
-        <div class="col-12 col-xl-4 animate-fade-in" style="animation-delay: 0.6s;">
-            <div class="glass-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-bold mb-0">Cảnh Báo Y Tế (AI)</h5>
-                    <a href="#" class="text-primary text-decoration-none small" style="color: var(--primary-color) !important;">Xem tất cả</a>
-                </div>
-                
-                <div class="alert-list">
-                    @forelse($recent_alerts ?? [
-                        ['member' => 'Trần Văn A', 'issue' => 'Nhịp tim > 185 bpm', 'time' => '5 phút trước', 'status' => 'critical'],
-                        ['member' => 'Lê Thị B', 'issue' => 'SpO2 < 92%', 'time' => '12 phút trước', 'status' => 'critical'],
-                        ['member' => 'Nguyễn Văn C', 'issue' => 'Sai tư thế nghiêm trọng (Squat)', 'time' => '1 giờ trước', 'status' => 'warning'],
-                    ] as $alert)
-                        <div class="d-flex align-items-center p-3 mb-2 rounded-3" style="background: rgba(0,0,0,0.2); border-left: 4px solid {{ $alert['status'] == 'critical' ? '#FF3366' : '#FFC107' }};">
-                            <div class="ms-2 flex-grow-1">
-                                <div class="fw-bold">{{ $alert['member'] }}</div>
-                                <div class="small text-muted">{{ $alert['issue'] }}</div>
+            <div class="col-lg-4">
+                <div class="chart-card">
+                    <h6 class="fw-bold mb-4 text-uppercase" style="letter-spacing: 0.5px; font-size: 0.8rem;">Cảnh Báo AI</h6>
+                    <div class="alert-list">
+                        @forelse($recent_alerts ?? [
+                            ['member' => 'Trần Văn A', 'issue' => 'Nhịp tim cao', 'time' => '5p', 'level' => 'critical'],
+                            ['member' => 'Lê Thị B', 'issue' => 'SpO2 thấp', 'time' => '15p', 'level' => 'critical'],
+                            ['member' => 'Nguyễn C', 'issue' => 'Sai tư thế', 'time' => '1h', 'level' => 'warning']
+                        ] as $alert)
+                            <div class="alert-item">
+                                <div class="icon-box icon-red me-3" style="min-width: 38px; height: 38px; font-size: 1rem;">
+                                    <i class="bi {{ ($alert['level'] ?? '') == 'critical' ? 'bi-activity' : 'bi-info-circle' }}"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold small">{{ $alert['member'] }}</div>
+                                    <div class="text-dim" style="font-size: 0.75rem;">{{ $alert['issue'] }}</div>
+                                </div>
+                                <div class="text-end text-dim" style="font-size: 0.7rem;">{{ $alert['time'] }}</div>
                             </div>
-                            <div class="small text-muted">{{ $alert['time'] }}</div>
-                        </div>
-                    @empty
-                        <div class="text-center text-muted py-4">Không có cảnh báo nào.</div>
-                    @endforelse
+                        @empty
+                            <p class="text-center text-dim py-5 small">Không có cảnh báo mới</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>
@@ -136,76 +214,56 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Khởi tạo Chart.js
-    const ctx = document.getElementById('revenueChart').getContext('2d');
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        
+        // Gradient cho đường biểu đồ
+        let gradOrange = ctx.createLinearGradient(0, 0, 0, 300);
+        gradOrange.addColorStop(0, 'rgba(255, 94, 0, 0.1)');
+        gradOrange.addColorStop(1, 'rgba(255, 94, 0, 0)');
     
-    // Gradient cho cột
-    let gradientOrange = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientOrange.addColorStop(0, 'rgba(255, 94, 0, 0.8)');
-    gradientOrange.addColorStop(1, 'rgba(255, 94, 0, 0.2)');
-
-    let gradientPurple = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientPurple.addColorStop(0, 'rgba(138, 43, 226, 0.8)');
-    gradientPurple.addColorStop(1, 'rgba(138, 43, 226, 0.2)');
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
-            datasets: [
-                {
-                    label: 'Doanh thu ($)',
-                    data: [32000, 35000, 31000, 42000, 45200, 41000, 48000],
-                    backgroundColor: gradientOrange,
-                    borderRadius: 8,
-                    barPercentage: 0.6
-                },
-                {
-                    label: 'Booking Mới',
-                    type: 'line',
-                    data: [150, 180, 160, 220, 250, 210, 280],
-                    borderColor: '#8A2BE2',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    pointBackgroundColor: '#8A2BE2',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: { color: '#A0A0B0', font: { family: 'Outfit' } }
-                }
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
+                datasets: [
+                    {
+                        label: 'Doanh Thu ($)',
+                        data: [3200, 3500, 3100, 4200, 4520, 4100, 4800],
+                        borderColor: '#FF5E00',
+                        backgroundColor: gradOrange,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#FF5E00',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }
+                ]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                    ticks: { color: '#A0A0B0' }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 },
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#A0A0B0' }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9', borderDash: [5, 5] },
+                        ticks: { color: '#94a3b8', font: { size: 11 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 11 } }
+                    }
                 }
             }
-        }
+        });
     });
 </script>
-<style>
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
-    }
-    .animate-pulse {
-        animation: pulse 1.5s infinite;
-    }
-</style>
 @endpush

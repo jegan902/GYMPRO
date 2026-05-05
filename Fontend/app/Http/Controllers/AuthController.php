@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        
+
         $response = $this->api->post('/auth/login', $credentials);
 
         if ($response->successful()) {
@@ -31,7 +31,11 @@ class AuthController extends Controller
             Session::put('api_token', $data['token']);
             Session::put('user_name', $data['fullName']);
             Session::put('user_role', $data['role']);
-            
+
+            if (in_array($data['role'], ['Super Admin', 'Branch Admin'])) {
+                return redirect()->intended('/admin/dashboard');
+            }
+
             return redirect()->intended('/dashboard');
         }
 

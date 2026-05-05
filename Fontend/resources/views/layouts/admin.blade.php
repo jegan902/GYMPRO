@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="dark">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -18,18 +18,18 @@
         :root {
             --primary-color: #FF5E00;
             --secondary-color: #E65500;
-            --bg-dark: #0F0F1A;
-            --sidebar-bg: #1A1A2E;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-main: #FFFFFF;
-            --text-muted: #A0A0B0;
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --bg-light: #F8F9FA;
+            --sidebar-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E8F0;
+            --text-main: #1A1D23;
+            --text-muted: #64748B;
+            --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-light);
             color: var(--text-main);
             margin: 0;
             display: flex;
@@ -51,62 +51,58 @@
         }
 
         .sidebar-brand {
-            padding: 24px;
-            font-size: 1.5rem;
+            padding: 20px 16px;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: white;
+            color: var(--text-main);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid var(--border-color);
+            letter-spacing: -0.5px;
         }
 
         .nav-menu {
-            padding: 20px 15px;
+            padding: 10px 16px;
             flex-grow: 1;
             overflow-y: auto;
         }
 
         .nav-item {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .nav-link {
             color: var(--text-muted);
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 12px;
             font-weight: 500;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
             text-decoration: none;
         }
 
         .nav-link i {
-            font-size: 1.2rem;
-            transition: transform 0.3s;
+            font-size: 1.1rem;
+            color: var(--text-muted);
         }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: white;
-            background: rgba(255, 94, 0, 0.1);
-        }
-
-        .nav-link.active {
-            background: var(--primary-color);
-            box-shadow: 0 4px 15px rgba(255, 94, 0, 0.3);
-        }
-
-        .nav-link:hover i {
-            transform: scale(1.1);
+        .nav-link:hover {
             color: var(--primary-color);
+            background: #FFF7ED;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background: #FFF7ED;
+            font-weight: 700;
         }
 
         .nav-link.active i {
-            color: white;
+            color: var(--primary-color);
         }
 
         /* --- MAIN CONTENT --- */
@@ -120,113 +116,103 @@
 
         /* --- TOPBAR --- */
         .topbar {
-            height: 70px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            height: 64px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
             z-index: 999;
         }
 
         .branch-selector select {
-            background: var(--sidebar-bg);
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 8px 16px;
+            background: #F1F5F9;
+            border: none;
+            color: var(--text-main);
+            padding: 6px 12px;
             border-radius: 8px;
-            font-family: 'Outfit';
+            font-size: 0.85rem;
+            font-weight: 600;
             outline: none;
+            cursor: pointer;
         }
 
         .topbar-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .btn-icon {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             position: relative;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
 
         .btn-icon:hover {
-            color: var(--primary-color);
+            background: #F1F5F9;
+            color: var(--text-main);
         }
 
         .notification-badge {
             position: absolute;
-            top: -2px;
-            right: -4px;
-            background: #FF3366;
-            color: white;
-            font-size: 0.6rem;
-            font-weight: bold;
-            padding: 2px 5px;
+            top: 6px;
+            right: 8px;
+            background: #EF4444;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            border: 2px solid white;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            transition: background 0.2s;
             cursor: pointer;
         }
 
+        .user-profile:hover {
+            background: #F1F5F9;
+        }
+
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--primary-color);
         }
 
         /* --- CONTENT AREA --- */
         .content-area {
-            padding: 30px;
-            flex-grow: 1;
-        }
-
-        /* --- UI COMPONENTS --- */
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
             padding: 24px;
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 255, 255, 0.2);
+            flex-grow: 1;
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.4s ease-out forwards;
         }
     </style>
     @stack('styles')
@@ -236,76 +222,42 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
-            <i class="bi bi-lightning-charge-fill text-primary" style="color: var(--primary-color) !important;"></i>
-            GYMPRO
+        <a href="/" class="sidebar-brand">
+            <i class="bi bi-lightning-charge-fill" style="color: var(--primary-color);"></i>
+            <span>GYMPRO</span>
         </a>
         <div class="nav-menu">
-            <div class="small text-uppercase text-muted fw-bold mb-2 ms-2"
-                style="font-size: 0.75rem; letter-spacing: 1px;">Overview</div>
-            <a href="{{ route('admin.dashboard') }}" class="nav-link active">
+            <div class="small text-uppercase text-dim fw-bold mb-2 ms-2"
+                style="font-size: 0.7rem; letter-spacing: 1px;">Overview</div>
+            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-grid-1x2"></i> Dashboard
             </a>
-            @if(session('user_role') !== 'Super Admin')
-                <a href="#" class="nav-link" onclick="alert('Tính năng Hội Viên đang được phát triển ở Phase tiếp theo!')">
-                    <i class="bi bi-people"></i> Hội Viên
-                </a>
-                <a href="#" class="nav-link" onclick="alert('Tính năng Lịch Tập đang được phát triển!')">
-                    <i class="bi bi-calendar2-week"></i> Lịch Tập
-                </a>
-            @endif
-
-            @if(session('user_role') !== 'Super Admin')
-                <div class="small text-uppercase text-muted fw-bold mb-2 ms-2 mt-4"
-                    style="font-size: 0.75rem; letter-spacing: 1px;">Smart AI</div>
-                <a href="#" class="nav-link" onclick="alert('Tính năng Phân Tích AI đang được phát triển!')">
-                    <i class="bi bi-robot"></i> Phân Tích AI
-                </a>
-                <a href="#" class="nav-link d-flex justify-content-between align-items-center"
-                    onclick="alert('Đang tải danh sách Cảnh báo Y tế...')">
-                    <span><i class="bi bi-heart-pulse"></i> Cảnh Báo Y Tế</span>
-                    <span class="badge bg-danger rounded-pill">3</span>
-                </a>
-            @endif
 
             <!-- SUPER ADMIN ONLY -->
             @if(session('user_role') == 'Super Admin')
-                <div class="small text-uppercase fw-bold mb-2 ms-2 mt-4"
-                    style="font-size: 0.75rem; letter-spacing: 1px; color: #ffc107;">
-                    <i class="bi bi-star-fill me-1"></i> Super Admin Tối Cao
+                <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
+                    style="font-size: 0.7rem; letter-spacing: 1px;">
+                    System Admin
                 </div>
                 <a href="{{ route('admin.branches') }}"
-                    class="nav-link {{ request()->routeIs('admin.branches') ? 'active' : '' }}"
-                    style="{{ request()->routeIs('admin.branches') ? 'color: #1A1A2E; background: #ffc107;' : 'color: rgba(255,193,7,0.8);' }}"
-                    onmouseover="if(!this.classList.contains('active')) this.style.color='#ffc107'"
-                    onmouseout="if(!this.classList.contains('active')) this.style.color='rgba(255,193,7,0.8)'">
-                    <i class="bi bi-building"></i> Quản lý Chi nhánh
+                    class="nav-link {{ request()->routeIs('admin.branches') ? 'active' : '' }}">
+                    <i class="bi bi-building"></i> Chi nhánh
                 </a>
                 <a href="{{ route('admin.managers') }}"
-                    class="nav-link {{ request()->routeIs('admin.managers') ? 'active' : '' }}"
-                    style="{{ request()->routeIs('admin.managers') ? 'color: #1A1A2E; background: #ffc107;' : 'color: rgba(255,193,7,0.8);' }}"
-                    onmouseover="if(!this.classList.contains('active')) this.style.color='#ffc107'"
-                    onmouseout="if(!this.classList.contains('active')) this.style.color='rgba(255,193,7,0.8)'">
-                    <i class="bi bi-person-badge"></i> Quản lý Nhân sự
+                    class="nav-link {{ request()->routeIs('admin.managers') ? 'active' : '' }}">
+                    <i class="bi bi-person-badge"></i> Quản lý
                 </a>
-                <a href="#" class="nav-link" style="color: rgba(255,193,7,0.8);"
-                    onclick="alert('Quản lý danh mục máy móc mẫu (Equipment Catalog)')"
-                    onmouseover="this.style.color='#ffc107'" onmouseout="this.style.color='rgba(255,193,7,0.8)'">
-                    <i class="bi bi-bicycle"></i> Danh mục Thiết bị
-                </a>
-                <a href="#" class="nav-link" style="color: rgba(255,193,7,0.8);"
-                    onclick="alert('Cấu hình hệ thống toàn cục (Global Config)')" onmouseover="this.style.color='#ffc107'"
-                    onmouseout="this.style.color='rgba(255,193,7,0.8)'">
-                    <i class="bi bi-sliders"></i> Cấu hình Hệ thống
+                <a href="#" class="nav-link" onclick="alert('Phát triển ở Phase sau!')">
+                    <i class="bi bi-bicycle"></i> Thiết bị
                 </a>
             @endif
 
-            <div class="small text-uppercase text-muted fw-bold mb-2 ms-2 mt-4"
-                style="font-size: 0.75rem; letter-spacing: 1px;">Management</div>
-            <a href="#" class="nav-link" onclick="alert('Module Tài Chính đang khóa!')">
+            <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
+                style="font-size: 0.7rem; letter-spacing: 1px;">Management</div>
+            <a href="#" class="nav-link" onclick="alert('Đang khóa!')">
                 <i class="bi bi-wallet2"></i> Tài Chính
             </a>
-            <a href="#" class="nav-link" onclick="alert('Mở Cài Đặt...')">
+            <a href="#" class="nav-link" onclick="alert('Cài Đặt...')">
                 <i class="bi bi-gear"></i> Cài Đặt
             </a>
         </div>
@@ -316,10 +268,10 @@
         <!-- Topbar -->
         <header class="topbar">
             <div class="branch-selector">
-                <select class="form-select-sm shadow-none" onchange="location.href='{{ route('admin.dashboard') }}?branch_id=' + this.value" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 5px 10px; cursor: pointer;">
-                    <option value="" class="text-dark">🌐 Toàn Hệ Thống</option>
+                <select class="shadow-none" onchange="location.href='{{ route('admin.dashboard') }}?branch_id=' + this.value">
+                    <option value="">🌐 Toàn Hệ Thống</option>
                     @foreach($branches ?? [] as $b)
-                        <option value="{{ $b['id'] }}" class="text-dark" {{ (request('branch_id') == $b['id']) ? 'selected' : '' }}>
+                        <option value="{{ $b['id'] }}" {{ (request('branch_id') == $b['id']) ? 'selected' : '' }}>
                             📍 {{ $b['name'] }}
                         </option>
                     @endforeach
@@ -329,29 +281,26 @@
             <div class="topbar-actions">
                 <button class="btn-icon">
                     <i class="bi bi-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge"></span>
                 </button>
-                <div class="user-profile dropdown">
+        <div class="user-profile dropdown">
                     <div class="d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=FF5E00&color=fff" alt="User"
-                            class="user-avatar">
+                        @php
+                            $avatarUrl = session('user_avatar') ?? ('https://ui-avatars.com/api/?name=' . urlencode(session('user_name')) . '&background=FF5E00&color=fff');
+                            if (str_starts_with($avatarUrl, '/') && !str_starts_with($avatarUrl, '//')) {
+                                $avatarUrl = config('services.backend.url_base') . $avatarUrl;
+                            }
+                        @endphp
+                        <img src="{{ $avatarUrl }}" alt="User" class="user-avatar">
                         <div class="d-none d-md-block">
-                            <div class="fw-bold" style="font-size: 0.9rem;">Nguyễn Văn Admin</div>
-                            <div class="text-muted" style="font-size: 0.75rem;">Super Admin</div>
+                            <div class="fw-bold" style="font-size: 0.8rem;">{{ session('user_name') }}</div>
+                            <div class="text-dim" style="font-size: 0.7rem;">{{ session('user_role') }}</div>
                         </div>
                     </div>
-                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg border-0 mt-2">
-                        <li><a class="dropdown-item" href="#"
-                                onclick="alert('Trang Quản lý Hồ sơ đang được cập nhật!')"><i
-                                    class="bi bi-person me-2"></i> Hồ sơ</a></li>
-                        <li><a class="dropdown-item" href="#"
-                                onclick="alert('Tính năng Phân quyền chưa được mở khóa!')"><i
-                                    class="bi bi-shield-lock me-2"></i> Phân quyền</a></li>
-                        <li>
-                            <hr class="dropdown-divider border-secondary">
-                        </li>
-                        <li><a class="dropdown-item text-danger" href="{{ route('logout') }}"><i
-                                    class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 py-2" style="font-size: 0.9rem;">
+                        <li><a class="dropdown-item py-2" href="{{ route('admin.profile') }}"><i class="bi bi-person me-2"></i> Hồ sơ</a></li>
+                        <li><hr class="dropdown-divider opacity-50"></li>
+                        <li><a class="dropdown-item text-danger py-2" href="{{ route('logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
                     </ul>
                 </div>
             </div>
