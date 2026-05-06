@@ -159,15 +159,30 @@
         }
 
         .update-btn {
-            background: #fbc531;
-            color: #2d3436;
-            font-weight: 800;
-            font-size: 0.55rem;
-            height: 22px;
-            padding: 0 10px;
-            border-radius: 3px;
+            background: var(--orange-primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            height: 42px;
+            padding: 0 30px;
+            border-radius: 12px;
             border: none;
             text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 94, 0, 0.3);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-btn:hover {
+            background: var(--orange-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 94, 0, 0.4);
+        }
+
+        .update-btn:active {
+            transform: translateY(0);
         }
 
         .avatar-img {
@@ -329,7 +344,7 @@
                                 <label for="avatarInput" class="avatar-edit-btn">
                                     <i class="bi bi-camera"></i>
                                 </label>
-                                <input type="file" id="avatarInput" name="avatar" hidden onchange="previewImage(this)">
+                                <input type="file" id="avatarInput" name="avatarFile" class="d-none" accept="image/*" onchange="previewAvatar(this)">
                             </div>
                             <div class="ms-1">
                                 <div class="d-flex align-items-center gap-2 mb-0">
@@ -572,9 +587,9 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="text-end mt-3">
-                    <button type="submit" class="update-btn" style="height: 28px; padding: 0 20px; font-size: 0.65rem;">
-                        <i class="bi bi-check-lg me-1"></i> LƯU THAY ĐỔI
+                <div class="text-end mt-4 mb-5">
+                    <button type="submit" class="update-btn">
+                        <i class="bi bi-save2"></i> Cập nhật ngay
                     </button>
                 </div>
             </form>
@@ -664,7 +679,7 @@
         // Also run on window load as fallback
         window.addEventListener('load', calculateMetrics);
 
-        function previewImage(input) {
+        function previewAvatar(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {

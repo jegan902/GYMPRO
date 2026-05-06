@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EquipmentController;
 
 Route::get('/', function () {
     return view('home');
@@ -39,6 +40,16 @@ Route::prefix('admin')->middleware('auth.api')->group(function () {
     Route::put('/managers/{id}', [AdminController::class, 'updateManager'])->name('admin.managers.update');
     Route::delete('/managers/{id}', [AdminController::class, 'deleteManager'])->name('admin.managers.delete');
     Route::post('/managers/{id}/toggle', [AdminController::class, 'toggleManager'])->name('admin.managers.toggle');
+
+    // Equipments
+    Route::get('/equipments', [EquipmentController::class, 'index'])->name('admin.equipments');
+    Route::get('/equipments/create', [EquipmentController::class, 'create'])->name('admin.equipments.create');
+    Route::get('/equipments/{id}', [EquipmentController::class, 'show'])->name('admin.equipments.show');
+    Route::get('/equipments/{id}/edit', [EquipmentController::class, 'edit'])->name('admin.equipments.edit');
+    Route::post('/equipments', [EquipmentController::class, 'store'])->name('admin.equipments.store');
+    Route::patch('/equipments/{id}', [EquipmentController::class, 'update'])->name('admin.equipments.update');
+    Route::delete('/equipments/{id}', [EquipmentController::class, 'destroy'])->name('admin.equipments.destroy');
+    Route::post('/equipments/{id}/maintenance', [EquipmentController::class, 'maintenance'])->name('admin.equipments.maintenance');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');

@@ -116,7 +116,7 @@
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-light rounded-circle p-2" 
                                 onclick="openManagerModal({{ json_encode($manager) }})" title="Chỉnh sửa">
-                                <i class="bi bi-pencil"></i>
+                                <i class="bi bi-pencil text-info"></i>
                             </button>
                             @if(session('user_email') != $manager['email'])
                             <form action="{{ route('admin.managers.delete', $manager['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân sự này?')">
@@ -139,7 +139,7 @@
 <!-- Modal Thêm/Sửa Quản Lý -->
 <div class="modal fade" id="managerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; color: white;">
+        <div class="modal-content" style="background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             <div class="modal-header border-secondary border-opacity-25">
                 <h5 class="modal-title fw-bold" id="modalTitle">Thêm Quản Lý Mới</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -149,32 +149,32 @@
                 <input type="hidden" name="_method" id="formMethod" value="POST">
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Họ và tên <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary" name="full_name" id="managerFullName" required>
+                        <label class="form-label text-warning small text-uppercase fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" name="full_name" id="managerFullName" required style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control bg-transparent text-white border-secondary" name="email" id="managerEmail" required>
+                        <label class="form-label text-warning small text-uppercase fw-bold">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control bg-dark text-white border-secondary" name="email" id="managerEmail" required style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Mật khẩu <span id="pwdLabel"></span></label>
-                        <input type="password" class="form-control bg-transparent text-white border-secondary" name="password" id="managerPassword" placeholder="Nhập để đặt mật khẩu mới...">
+                        <label class="form-label text-warning small text-uppercase fw-bold">Mật khẩu <span id="pwdLabel"></span></label>
+                        <input type="password" class="form-control bg-dark text-white border-secondary" name="password" id="managerPassword" placeholder="Nhập để đặt mật khẩu mới..." style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Vai trò</label>
-                            <select class="form-select bg-transparent text-white border-secondary" name="role_id" id="managerRoleId">
+                            <label class="form-label text-warning small text-uppercase fw-bold">Vai trò</label>
+                            <select class="form-select bg-dark text-white border-secondary" name="role_id" id="managerRoleId" style="background-color: rgba(0,0,0,0.2) !important;">
                                 @foreach($roles as $role)
-                                    <option value="{{ $role['id'] }}" class="text-dark">{{ $role['name'] }}</option>
+                                    <option value="{{ $role['id'] }}" class="text-dark bg-white">{{ $role['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Chi nhánh</label>
-                            <select class="form-select bg-transparent text-white border-secondary" name="branch_id" id="managerBranchId">
-                                <option value="" class="text-dark">-- Tất cả chi nhánh --</option>
+                            <label class="form-label text-warning small text-uppercase fw-bold">Chi nhánh</label>
+                            <select class="form-select bg-dark text-white border-secondary" name="branch_id" id="managerBranchId" style="background-color: rgba(0,0,0,0.2) !important;">
+                                <option value="" class="text-dark bg-white">-- Tất cả chi nhánh --</option>
                                 @foreach($branches as $branch)
-                                    <option value="{{ $branch['id'] }}" class="text-dark">{{ $branch['name'] }}</option>
+                                    <option value="{{ $branch['id'] }}" class="text-dark bg-white">{{ $branch['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>

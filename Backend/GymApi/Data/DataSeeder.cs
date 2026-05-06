@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using GymApi.Entities;
 
 namespace GymApi.Data
@@ -31,288 +33,322 @@ namespace GymApi.Data
             }
 
             // Seed Roles
-            if (!context.Roles.Any())
-            {
-                var role = new Role { Name = "Super Admin", Description = "Highest level of access" };
-                context.Roles.Add(role);
-                context.SaveChanges();
-
-                // Assign all permissions to Super Admin
-                var allPermissions = context.Permissions.ToList();
-                foreach (var perm in allPermissions)
-                {
-                    context.RolePermissions.Add(new RolePermission
-                    {
-                        RoleId = role.Id,
-                        PermissionId = perm.Id
-                    });
-                }
-                context.SaveChanges();
-            }
-                  // --- KHỞI TẠO 5 VAI TRÒ CHÍNH ---
-            
-            // 1. Super Admin
             var superAdminRole = context.Roles.FirstOrDefault(r => r.Name == "Super Admin");
             if (superAdminRole == null)
             {
-                superAdminRole = new Role { Name = "Super Admin", Description = "Highest level of access - Toàn quyền hệ thống" };
+                superAdminRole = new Role { Name = "Super Admin", Description = "Toàn quyền hệ thống" };
                 context.Roles.Add(superAdminRole);
-            }
-
-            // 2. Branch Admin
-            var branchAdminRole = context.Roles.FirstOrDefault(r => r.Name == "Branch Admin");
-            if (branchAdminRole == null)
-            {
-                branchAdminRole = new Role { Name = "Branch Admin", Description = "Quản lý chi nhánh cụ thể" };
-                context.Roles.Add(branchAdminRole);
-            }
-
-            // 3. Staff/PT
-            var staffRole = context.Roles.FirstOrDefault(r => r.Name == "Staff/PT");
-            if (staffRole == null)
-            {
-                staffRole = new Role { Name = "Staff/PT", Description = "Nhân viên / Người hướng dẫn tập luyện" };
-                context.Roles.Add(staffRole);
-            }
-
-            // 4. Member
-            var memberRole = context.Roles.FirstOrDefault(r => r.Name == "Member");
-            if (memberRole == null)
-            {
-                memberRole = new Role { Name = "Member", Description = "Hội viên (Sử dụng các gói nâng cao & chức năng thông minh)" };
-                context.Roles.Add(memberRole);
-            }
-
-            // 5. User
-            // 1. Đảm bảo thực thể Hệ thống (HQ) luôn tồn tại
-            var systemHq = context.Branches.OrderBy(b => b.Id).FirstOrDefault();
-            if (systemHq == null)
-            {
-                systemHq = new Branch { Name = "Hệ thống (HQ)", Address = "Toàn hệ thống", Phone = "N/A", IsActive = true };
-                context.Branches.Add(systemHq);
                 context.SaveChanges();
-            }
-            else if (systemHq.Name != "Hệ thống (HQ)")
-            {
-                systemHq.Name = "Hệ thống (HQ)";
+                
+                var allPermissions = context.Permissions.ToList();
+                foreach (var perm in allPermissions)
+                {
+                    context.RolePermissions.Add(new RolePermission { RoleId = superAdminRole.Id, PermissionId = perm.Id });
+                }
                 context.SaveChanges();
             }
 
-            // 2. Tạo chi nhánh vật lý HQ Quận 1 riêng biệt
-            var physicalBranchQ1 = context.Branches.FirstOrDefault(b => b.Name == "HQ Quận 1");
-            if (physicalBranchQ1 == null)
-            {
-                physicalBranchQ1 = new Branch { Name = "HQ Quận 1", Address = "Số 1, Quận 1, TP.HCM", Phone = "0901234567", IsActive = true };
-                context.Branches.Add(physicalBranchQ1);
-                context.SaveChanges();
-            }
-            var userRole = context.Roles.FirstOrDefault(r => r.Name == "User");
-            if (userRole == null)
-            {
-                userRole = new Role { Name = "User", Description = "Khách vãng lai, đăng ký tập gói thường, xem tin tức" };
-                context.Roles.Add(userRole);
-            }
+            var branchAdminRole = context.Roles.FirstOrDefault(r => r.Name == "Branch Admin") ?? new Role { Name = "Branch Admin" };
+            var staffRole = context.Roles.FirstOrDefault(r => r.Name == "Staff/PT") ?? new Role { Name = "Staff/PT" };
+            var memberRole = context.Roles.FirstOrDefault(r => r.Name == "Member") ?? new Role { Name = "Member" };
+            var userRole = context.Roles.FirstOrDefault(r => r.Name == "User") ?? new Role { Name = "User" };
+
+            if (branchAdminRole.Id == 0) context.Roles.Add(branchAdminRole);
+            if (staffRole.Id == 0) context.Roles.Add(staffRole);
+            if (memberRole.Id == 0) context.Roles.Add(memberRole);
+            if (userRole.Id == 0) context.Roles.Add(userRole);
             context.SaveChanges();
 
-            // --- KHỞI TẠO CHI NHÁNH & NGƯỜI DÙNG HỆ THỐNG ---
-            if (systemHq != null)
+            // Seed Admin User
+            var hq = context.Branches.First();
+            if (!context.Users.Any(u => u.Email == "admin@gympro.com"))
             {
-                // Super Admin mặc định thuộc về Hệ thống (HQ)
-                var superAdmin = context.Users.FirstOrDefault(u => u.Email == "admin@gympro.com");
-                if (superAdmin == null)
+                context.Users.Add(new User
                 {
-                    context.Users.Add(new User
-                    {
-                        FullName = "Nguyễn Văn Super Admin",
-                        Email = "admin@gympro.com",
-                        Password = BCrypt.Net.BCrypt.HashPassword("admin"),
-                        Role = "admin",
-                        RoleId = superAdminRole.Id,
-                        BranchId = systemHq.Id,
-                        IsActive = true,
-                        Phone = "0999999999"
-                    });
-                }
+                    FullName = "Super Admin",
+                    Email = "admin@gympro.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("admin"),
+                    Role = "admin",
+                    RoleId = superAdminRole.Id,
+                    BranchId = hq.Id,
+                    IsActive = true
+                });
                 context.SaveChanges();
             }
 
-            if (physicalBranchQ1 != null)
-            {
-                // Branch Admin mẫu thuộc về chi nhánh HQ Quận 1
-                if (!context.Users.Any(u => u.Email == "admin1@gympro.com"))
-                {
-                    context.Users.Add(new User
-                    {
-                        FullName = "Trần Quản Lý Q1",
-                        Email = "admin1@gympro.com",
-                        Password = BCrypt.Net.BCrypt.HashPassword("admin"),
-                        Role = "admin",
-                        RoleId = branchAdminRole.Id,
-                        BranchId = physicalBranchQ1.Id,
-                        IsActive = true,
-                        Phone = "0911111111"
-                    });
-                }
-                context.SaveChanges();
-            }
-
-            // --- DỌN DẸP & ĐỒNG BỘ DỮ LIỆU ---
-            var allUsers = context.Users.ToList();
-            var firstBranch = context.Branches.FirstOrDefault();
-            foreach (var u in allUsers)
-            {
-                // Chuẩn hóa chuỗi Role và gán RoleId tương ứng
-                if (u.Email == "admin@gympro.com" || u.Role == "Super Admin") {
-                    u.Role = "admin";
-                    u.RoleId = superAdminRole.Id;
-                }
-                else if (u.Role == "Branch Admin" || (u.Role == "admin" && u.Email != "admin@gympro.com")) {
-                    u.Role = "admin";
-                    u.RoleId = branchAdminRole.Id;
-                }
-                else if (u.Role == "Staff/PT" || u.Role == "staff") {
-                    u.RoleId = staffRole.Id;
-                }
-                else if (u.Role == "Member" || u.Role == "member") {
-                    u.RoleId = memberRole.Id;
-                    u.Role = "member";
-                }
-                else if (u.Role == "User" || u.Role == "user") {
-                    u.RoleId = userRole.Id;
-                    u.Role = "user";
-                }
-
-                // Gán chi nhánh mặc định nếu thiếu
-                if (u.BranchId == null && firstBranch != null) {
-                    u.BranchId = firstBranch.Id;
-                }
-            }
-            context.SaveChanges();
-
-            // [MỚI] Đồng bộ cưỡng ép và dọn dẹp triệt để (Đồng bộ cả Role string và RoleId)
-            var allUsersToSync = context.Users.Where(u => u.Email != "admin@gympro.com").ToList();
-            var managerIds = context.Branches.Where(b => b.ManagerId != null).Select(b => b.ManagerId).ToList();
-
-            foreach (var user in allUsersToSync)
-            {
-                if (managerIds.Contains(user.Id))
-                {
-                    // Nếu là manager của chi nhánh nào đó -> Branch Admin (ID = 2)
-                    var br = context.Branches.First(b => b.ManagerId == user.Id);
-                    user.BranchId = br.Id;
-                    user.Role = "admin"; 
-                    user.RoleId = 2; 
-                }
-                else if (user.RoleId != 4) // Nếu không phải manager và không phải hội viên (ID = 4)
-                {
-                    // Nếu là nhân sự quản lý dự phòng (kiểm tra theo role cũ hoặc tên)
-                    if (user.Role == "admin" || user.Role == "Branch Admin" || user.FullName.Contains("Quản Lý") || user.Email.Contains("admin"))
-                    {
-                        user.BranchId = 1; // Về Hệ thống (HQ)
-                        user.Role = "admin";
-                        user.RoleId = 2; // Branch Admin
-                    }
-                    else
-                    {
-                        // Đưa về trạng thái chờ tại HQ -> User (ID = 5)
-                        user.BranchId = 1;
-                        user.Role = "user";
-                        user.RoleId = 5;
-                    }
-                }
-            }
-            context.SaveChanges();
-
-            SeedFinancialData(context, memberRole);
+            SeedEquipmentData(context);
         }
 
-        private static void SeedFinancialData(GymDbContext context, Role memberRole)
+        private static void SeedEquipmentData(GymDbContext context)
         {
-            // 1. Seed Packages nếu chưa có
-            if (!context.Packages.Any()) {
-                var pkgGold = new Package { Name = "Gói Vàng (1 Năm)", Duration = 365, Price = 5000000, Description = "Toàn quyền sử dụng dịch vụ" };
-                var pkgSilver = new Package { Name = "Gói Bạc (1 Tháng)", Duration = 30, Price = 500000, Description = "Chỉ sử dụng phòng Gym" };
-                context.Packages.AddRange(pkgGold, pkgSilver);
-                context.SaveChanges();
+            try {
+                // [DATABASE-DRIVEN PATCH] Tự động thêm cột nếu chưa có (vì chưa có Migration tool)
+                context.Database.ExecuteSqlRaw(@"
+                    -- Category Patches
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_categories_dim') AND name = 'enum_value')
+                        ALTER TABLE equipment_categories_dim ADD [enum_value] INT NOT NULL DEFAULT 0;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_categories_dim') AND name = 'key')
+                        ALTER TABLE equipment_categories_dim ADD [key] NVARCHAR(50) NULL;
+                    
+                    -- Brand Patches
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_brands') AND name = 'website')
+                        ALTER TABLE equipment_brands ADD [website] NVARCHAR(200) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_brands') AND name = 'country_of_origin')
+                        ALTER TABLE equipment_brands ADD [country_of_origin] NVARCHAR(100) NULL;
+
+                    -- Supplier Patches
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_suppliers') AND name = 'contact_person')
+                        ALTER TABLE equipment_suppliers ADD [contact_person] NVARCHAR(200) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_suppliers') AND name = 'address')
+                        ALTER TABLE equipment_suppliers ADD [address] NVARCHAR(500) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_suppliers') AND name = 'phone')
+                        ALTER TABLE equipment_suppliers ADD [phone] NVARCHAR(50) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('equipment_suppliers') AND name = 'email')
+                        ALTER TABLE equipment_suppliers ADD [email] NVARCHAR(200) NULL;
+
+                    -- Member Patches (Health & Profile)
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'height')
+                        ALTER TABLE members ADD [height] DECIMAL(18,2) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'weight')
+                        ALTER TABLE members ADD [weight] DECIMAL(18,2) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'bmi')
+                        ALTER TABLE members ADD [bmi] DECIMAL(18,2) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'body_fat')
+                        ALTER TABLE members ADD [body_fat] DECIMAL(18,2) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'nationality')
+                        ALTER TABLE members ADD [nationality] NVARCHAR(50) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'id_card')
+                        ALTER TABLE members ADD [id_card] NVARCHAR(20) NULL;
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('members') AND name = 'pt_sessions')
+                        ALTER TABLE members ADD [pt_sessions] INT NOT NULL DEFAULT 0;
+
+                    -- Create body_metrics table if missing
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('body_metrics') AND type = 'U')
+                    BEGIN
+                        CREATE TABLE [body_metrics] (
+                            [id] INT IDENTITY(1,1) PRIMARY KEY,
+                            [member_id] INT NOT NULL,
+                            [weight] DECIMAL(18,2) NULL,
+                            [height] DECIMAL(18,2) NULL,
+                            [body_fat] DECIMAL(18,2) NULL,
+                            [muscle_mass] DECIMAL(18,2) NULL,
+                            [bmi] DECIMAL(18,2) NULL,
+                            [waist] DECIMAL(18,2) NULL,
+                            [chest] DECIMAL(18,2) NULL,
+                            [arm] DECIMAL(18,2) NULL,
+                            [thigh] DECIMAL(18,2) NULL,
+                            [notes] NVARCHAR(MAX) NULL,
+                            [measured_date] DATETIME2 NOT NULL,
+                            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE()
+                        );
+                    END
+
+                    -- Create attendance table if missing
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('attendance') AND type = 'U')
+                    BEGIN
+                        CREATE TABLE [attendance] (
+                            [id] INT IDENTITY(1,1) PRIMARY KEY,
+                            [member_id] INT NOT NULL,
+                            [check_in_time] DATETIME2 NOT NULL,
+                            [check_out_time] DATETIME2 NULL,
+                            [method] NVARCHAR(50) NULL DEFAULT 'manual',
+                            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE()
+                        );
+                    END
+
+                    -- Create invoices/payments/subscriptions if missing (basic structure)
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('subscriptions') AND type = 'U')
+                    BEGIN
+                        CREATE TABLE [subscriptions] (
+                            [id] INT IDENTITY(1,1) PRIMARY KEY,
+                            [member_id] INT NOT NULL,
+                            [package_id] INT NOT NULL,
+                            [start_date] DATETIME2 NULL,
+                            [end_date] DATETIME2 NULL,
+                            [status] NVARCHAR(20) DEFAULT 'pending',
+                            [payment_status] NVARCHAR(20) DEFAULT 'pending',
+                            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE(),
+                            [updated_at] DATETIME2 NULL,
+                            [is_deleted] BIT NOT NULL DEFAULT 0
+                        );
+                    END
+
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('invoices') AND type = 'U')
+                    BEGIN
+                        CREATE TABLE [invoices] (
+                            [id] INT IDENTITY(1,1) PRIMARY KEY,
+                            [member_id] INT NOT NULL,
+                            [subscription_id] INT NULL,
+                            [amount] DECIMAL(18,2) NOT NULL,
+                            [status] NVARCHAR(20) DEFAULT 'pending',
+                            [notes] NVARCHAR(MAX) NULL,
+                            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE(),
+                            [updated_at] DATETIME2 NULL,
+                            [is_deleted] BIT NOT NULL DEFAULT 0
+                        );
+                    END
+
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('payments') AND type = 'U')
+                    BEGIN
+                        CREATE TABLE [payments] (
+                            [id] INT IDENTITY(1,1) PRIMARY KEY,
+                            [invoice_id] INT NOT NULL,
+                            [amount] DECIMAL(18,2) NOT NULL,
+                            [payment_method] NVARCHAR(50) DEFAULT 'cash',
+                            [transaction_id] NVARCHAR(100) NULL,
+                            [status] NVARCHAR(20) DEFAULT 'success',
+                            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE(),
+                            [updated_at] DATETIME2 NULL,
+                            [is_deleted] BIT NOT NULL DEFAULT 0
+                        );
+                    END
+                ");
+
+                context.Database.ExecuteSqlRaw("UPDATE equipments SET current_location_id = NULL");
+                
+                string[] tables = { "maintenance_logs", "equipment_media", "equipment_location_history", 
+                                  "equipment_purchase_history", "equipment_smart_configs", "equipment_specifications", 
+                                  "equipments", "equipment_brands", "equipment_categories_dim", "equipment_suppliers" };
+                
+                foreach (var table in tables)
+                {
+                    context.Database.ExecuteSqlRaw($"DELETE FROM {table}");
+                    context.Database.ExecuteSqlRaw($"DBCC CHECKIDENT ('{table}', RESEED, 0)");
+                }
+
+                Console.WriteLine("[Seeder] Database cleaned and reset via SQL.");
+            } catch (Exception ex) {
+                Console.WriteLine("[Seeder] Cleaning error: " + ex.Message);
             }
+
+            // 1. Seed Dimensions
+            var brands = new List<EquipmentBrand> {
+                new EquipmentBrand { Name = "Technogym", Description = "Premium Italian Equipment" },
+                new EquipmentBrand { Name = "Matrix", Description = "Professional Fitness Solutions" },
+                new EquipmentBrand { Name = "Life Fitness", Description = "Global Leader in Fitness" },
+                new EquipmentBrand { Name = "ZIVA", Description = "High-end Free Weights" },
+                new EquipmentBrand { Name = "Precor", Description = "Reliable Cardio Solutions" }
+            };
+            context.EquipmentBrands.AddRange(brands);
+
+            var categories = new List<EquipmentCategoryDim> {
+                new EquipmentCategoryDim { Name = "Máy Tim mạch", Key = "CardioEquipment", EnumValue = EquipmentCategory.CardioEquipment },
+                new EquipmentCategoryDim { Name = "Máy tập tạ", Key = "StrengthMachine", EnumValue = EquipmentCategory.StrengthMachine },
+                new EquipmentCategoryDim { Name = "Tạ tự do", Key = "FreeWeight", EnumValue = EquipmentCategory.FreeWeight },
+                new EquipmentCategoryDim { Name = "Tập chức năng", Key = "FunctionalTraining", EnumValue = EquipmentCategory.FunctionalTraining },
+                new EquipmentCategoryDim { Name = "Yoga & Pilates", Key = "YogaEquipment", EnumValue = EquipmentCategory.YogaEquipment },
+                new EquipmentCategoryDim { Name = "Thiết bị thông minh", Key = "SmartDeviceIoT", EnumValue = EquipmentCategory.SmartDeviceIoT },
+                new EquipmentCategoryDim { Name = "Tủ Locker", Key = "LockerEquipment", EnumValue = EquipmentCategory.LockerEquipment }
+            };
+            context.EquipmentCategories.AddRange(categories);
+
+            var suppliers = new List<EquipmentSupplier> {
+                new EquipmentSupplier { Name = "Technogym VN", Email = "contact@technogym.vn", Phone = "1900-1234" },
+                new EquipmentSupplier { Name = "GymX Global", Email = "sales@gymx.com", Phone = "0988-777-666" },
+                new EquipmentSupplier { Name = "Hoàng Gia Fitness", Email = "info@hoanggia.vn", Phone = "028-1234-5678" }
+            };
+            context.EquipmentSuppliers.AddRange(suppliers);
+            context.SaveChanges();
 
             var branches = context.Branches.ToList();
-            if (!branches.Any()) return;
+            var branch = branches.First();
 
-            // 2. Tạo 10 tài khoản hội viên mẫu
-            string[] memberNames = { "Nguyễn Hoàng Nam", "Lê Thu Thảo", "Trần Minh Quân", "Phạm Hải Yến", "Đặng Quốc Bảo", "Vũ Phương Linh", "Bùi Anh Tuấn", "Ngô Diệp Chi", "Đỗ Hữu Phước", "Trương Mỹ Hạnh" };
-            
-            for (int i = 0; i < memberNames.Length; i++)
+            // 2. Seed Main Equipments
+            for (int i = 1; i <= 105; i++)
             {
-                var email = $"member{i+1}@gmail.com";
-                var user = context.Users.FirstOrDefault(u => u.Email == email);
+                var brand = brands[i % brands.Count];
+                var cat = categories[i % categories.Count];
+                var sup = suppliers[i % suppliers.Count];
+                var targetBranch = branches[i % branches.Count];
                 
-                if (user == null)
-                {
-                    var branch = branches[i % branches.Count];
-                    user = new User
-                    {
-                        FullName = memberNames[i],
-                        Email = email,
-                        Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                        Role = "member",
-                        RoleId = memberRole.Id,
-                        BranchId = branch.Id,
-                        IsActive = true,
-                        Phone = $"090{i}123456",
-                        CreatedAt = DateTime.UtcNow.AddMonths(-1)
-                    };
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                }
-                else
-                {
-                    user.Role = "member";
-                    user.RoleId = memberRole.Id;
-                    context.SaveChanges();
-                }
+                var equipment = new Equipment {
+                    DeviceCode = $"EQ-{brand.Name.Substring(0, 2).ToUpper()}-{i:D3}",
+                    Name = $"{brand.Name} {cat.Name} Pro Series {i}",
+                    Description = $"High performance {cat.Name} equipment from {brand.Name}.",
+                    BrandId = brand.Id,
+                    CategoryId = cat.Id,
+                    SupplierId = sup.Id,
+                    BranchId = targetBranch.Id,
+                    Status = (i % 20 == 0) ? EquipmentStatus.Broken : ((i % 15 == 0) ? EquipmentStatus.UnderMaintenance : EquipmentStatus.Active),
+                    Condition = (i % 30 == 0) ? ConditionLevel.Poor : ConditionLevel.New,
+                    ImageUrl = GetMockImageUrl(cat.EnumValue),
+                    CreatedAt = DateTime.UtcNow
+                };
+                context.Equipments.Add(equipment);
+                context.SaveChanges();
 
-                // Kiểm tra Member profile
-                var member = context.Members.FirstOrDefault(m => m.UserId == user.Id);
-                if (member == null)
-                {
-                    member = new Member
-                    {
-                        UserId = user.Id,
-                        Status = "active",
-                        JoinDate = DateTime.Now.AddMonths(-1),
-                        Gender = i % 2 == 0 ? "male" : "female"
-                    };
-                    context.Members.Add(member);
-                    context.SaveChanges();
+                // 3. Related 1:1
+                context.EquipmentSpecifications.Add(new EquipmentSpecification {
+                    EquipmentId = equipment.Id,
+                    Weight = 50 + (i * 2),
+                    WeightUnit = "kg",
+                    Model = $"Mod-{brand.Name}-{2024}",
+                    SerialNumber = $"SN-{equipment.DeviceCode}-{i:D4}"
+                });
+
+                if (cat.EnumValue == EquipmentCategory.CardioEquipment || cat.EnumValue == EquipmentCategory.SmartDeviceIoT) {
+                    context.EquipmentSmartConfigs.Add(new EquipmentSmartConfig {
+                        EquipmentId = equipment.Id,
+                        IsSmartDevice = true,
+                        BleMacAddress = $"AA:BB:CC:{i:X2}:{i:X2}:{i:X2}",
+                        IpAddress = $"192.168.{targetBranch.Id}.{100 + i}",
+                        FirmwareVersion = "v3.0.1"
+                    });
                 }
 
-                // 3. Tạo hóa đơn nếu chưa có
-                if (!context.Invoices.Any(inv => inv.MemberId == member.Id))
-                {
-                    var amount = i % 2 == 0 ? 5000000 : 500000;
-                    var invoice = new Invoice 
-                    { 
-                        MemberId = member.Id, 
-                        Amount = amount, 
-                        Status = "paid", 
-                        CreatedAt = DateTime.UtcNow.AddDays(-10 + i) 
-                    };
-                    context.Invoices.Add(invoice);
-                    context.SaveChanges();
+                // 4. History 1:N
+                context.EquipmentPurchases.Add(new EquipmentPurchaseHistory {
+                    EquipmentId = equipment.Id,
+                    PurchaseDate = DateTime.UtcNow.AddMonths(-i % 24),
+                    PurchasePrice = 10000000 + (i * 500000),
+                    Quantity = 1,
+                    InvoiceNumber = $"VAT-{2024}-{i:D4}"
+                });
 
-                    var payment = new Payment 
-                    { 
-                        InvoiceId = invoice.Id, 
-                        Amount = amount, 
-                        Status = "success", 
-                        CreatedAt = DateTime.UtcNow.AddDays(-10 + i), 
-                        PaymentMethod = "Chuyển khoản" 
-                    };
-                    context.Payments.Add(payment);
-                    context.SaveChanges();
+                var loc = new EquipmentLocationHistory {
+                    EquipmentId = equipment.Id,
+                    BranchId = targetBranch.Id,
+                    Room = i % 2 == 0 ? "Main Hall" : "Zone B",
+                    MovedAt = DateTime.UtcNow.AddDays(-i),
+                    Notes = "Initial placement"
+                };
+                context.EquipmentLocations.Add(loc);
+                context.SaveChanges();
+
+                equipment.CurrentLocationId = loc.Id;
+                context.SaveChanges();
+
+                context.EquipmentMediaFiles.Add(new EquipmentMedia {
+                    EquipmentId = equipment.Id,
+                    Url = equipment.ImageUrl!,
+                    IsPrimary = true
+                });
+
+                if (equipment.Status == EquipmentStatus.UnderMaintenance || equipment.Status == EquipmentStatus.Broken) {
+                    context.MaintenanceLogs.Add(new MaintenanceLog {
+                        EquipmentId = equipment.Id,
+                        Issue = "Check-up required",
+                        RepairAction = "Inspection pending",
+                        Cost = 0,
+                        PerformedBy = "Pending",
+                        RepairedAt = DateTime.UtcNow,
+                        Status = "In Progress"
+                    });
                 }
             }
+            context.SaveChanges();
+            Console.WriteLine("[Seeder] 105 Normalized & Database-Driven Categorized Equipments seeded.");
+        }
+
+        private static string GetMockImageUrl(EquipmentCategory cat)
+        {
+            return cat switch
+            {
+                EquipmentCategory.CardioEquipment => "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=200",
+                EquipmentCategory.StrengthMachine => "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200",
+                EquipmentCategory.FreeWeight => "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200",
+                _ => "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=200"
+            };
         }
     }
 }

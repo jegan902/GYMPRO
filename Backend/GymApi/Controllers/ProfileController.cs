@@ -22,98 +22,136 @@ namespace GymApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {
-            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            try
             {
-                return Unauthorized(new { message = "Không xác định được người dùng" });
+                var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+                {
+                    return Unauthorized(new { message = "Không xác định được người dùng" });
+                }
+
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+
+                if (user == null) return NotFound(new { message = "Không tìm thấy người dùng" });
+
+                var member = await _context.Members
+                    .FirstOrDefaultAsync(m => m.UserId == userId && !m.IsDeleted);
+
+                var subscription = member != null 
+                    ? await _context.Subscriptions
+                        .Include(s => s.Package)
+                        .OrderByDescending(s => s.CreatedAt)
+                        .FirstOrDefaultAsync(s => s.MemberId == member.Id && !s.IsDeleted)
+                    : null;
+
+                var metrics = member != null
+                    ? await _context.BodyMetrics
+                        .OrderByDescending(b => b.MeasuredDate)
+                        .FirstOrDefaultAsync(b => b.MemberId == member.Id)
+                    : null;
+
+                var attendance = member != null
+                    ? await _context.Attendances
+                        .Where(a => a.MemberId == member.Id)
+                        .OrderByDescending(a => a.CheckInTime)
+                        .Take(5)
+                        .ToListAsync()
+                    : new List<Attendance>();
+
+                var payments = member != null
+                    ? await _context.Payments
+                        .Include(p => p.Invoice)
+                        .Where(p => p.Invoice != null && p.Invoice.MemberId == member.Id)
+                        .OrderByDescending(p => p.CreatedAt)
+                        .Take(5)
+                        .ToListAsync()
+                    : new List<Payment>();
+
+                // Xây dựng lịch sử bằng cách sử dụng một cấu trúc dữ liệu trung gian để tránh lỗi kiểu nặc danh
+                var historyItems = new List<dynamic>();
+                
+                foreach (var a in attendance)
+                {
+                    historyItems.Add(new {
+                        type = "Check-in",
+                        date = a.CheckInTime.ToString("dd/MM/yyyy"),
+                        actualDate = a.CheckInTime,
+                        status = "Check",
+                        stats = a.CheckOutTime.HasValue ? "OK" : "In"
+                    });
+                }
+
+                foreach (var p in payments)
+                {
+                    historyItems.Add(new {
+                        type = "Payment",
+                        date = p.CreatedAt.ToString("dd/MM/yyyy"),
+                        actualDate = p.CreatedAt,
+                        status = "Paym",
+                        stats = p.Amount.ToString("N0") + " VNĐ"
+                    });
+                }
+
+                var sortedHistory = historyItems
+                    .OrderByDescending(x => x.actualDate)
+                    .Take(5)
+                    .Select(x => new {
+                        x.type,
+                        x.date,
+                        x.status,
+                        x.stats
+                    })
+                    .ToList();
+
+                return Ok(new {
+                    user = new {
+                        id = user.Id,
+                        fullName = user.FullName,
+                        email = user.Email,
+                        phone = user.Phone,
+                        role = user.Role,
+                        avatar = user.Avatar ?? $"https://ui-avatars.com/api/?name={user.FullName}&background=FF5E00&color=fff",
+                        createdAt = user.CreatedAt
+                    },
+                    member = member != null ? new {
+                        gender = member.Gender,
+                        nationality = member.Nationality ?? "Việt Nam",
+                        dateOfBirth = member.DateOfBirth?.ToString("yyyy-MM-dd"),
+                        address = member.Address,
+                        idCard = member.IdCard,
+                        ptSessions = member.PtSessions,
+                        status = member.Status
+                    } : null,
+                    subscription = subscription != null ? new {
+                        packageName = subscription.Package?.Name,
+                        startDate = subscription.StartDate?.ToString("dd/MM/yyyy"),
+                        endDate = subscription.EndDate?.ToString("dd/MM/yyyy"),
+                        status = subscription.Status
+                    } : null,
+                    metrics = metrics != null ? new {
+                        weight = metrics.Weight ?? member?.Weight,
+                        height = member?.Height,
+                        bmi = metrics.Bmi ?? member?.Bmi,
+                        bodyFat = metrics.BodyFat ?? member?.BodyFat
+                    } : new {
+                        weight = (decimal?)(member?.Weight ?? 0),
+                        height = (decimal?)(member?.Height ?? 0),
+                        bmi = (decimal?)(member?.Bmi ?? 0),
+                        bodyFat = (decimal?)(member?.BodyFat ?? 0)
+                    },
+                    history = sortedHistory
+                });
             }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
-
-            if (user == null) return NotFound(new { message = "Không tìm thấy người dùng" });
-
-            var member = await _context.Members
-                .FirstOrDefaultAsync(m => m.UserId == userId && !m.IsDeleted);
-
-            var subscription = member != null 
-                ? await _context.Subscriptions
-                    .Include(s => s.Package)
-                    .OrderByDescending(s => s.CreatedAt)
-                    .FirstOrDefaultAsync(s => s.MemberId == member.Id && !s.IsDeleted)
-                : null;
-
-            var metrics = member != null
-                ? await _context.BodyMetrics
-                    .OrderByDescending(b => b.MeasuredDate)
-                    .FirstOrDefaultAsync(b => b.MemberId == member.Id)
-                : null;
-
-            var attendance = member != null
-                ? await _context.Attendances
-                    .Where(a => a.MemberId == member.Id)
-                    .OrderByDescending(a => a.CheckInTime)
-                    .Take(5)
-                    .ToListAsync()
-                : new List<Attendance>();
-
-            var payments = member != null
-                ? await _context.Payments
-                    .Include(p => p.Invoice)
-                    .Where(p => p.Invoice.MemberId == member.Id)
-                    .OrderByDescending(p => p.CreatedAt)
-                    .Take(5)
-                    .ToListAsync()
-                : new List<Payment>();
-
-            return Ok(new {
-                user = new {
-                    id = user.Id,
-                    fullName = user.FullName,
-                    email = user.Email,
-                    phone = user.Phone,
-                    role = user.Role,
-                    avatar = user.Avatar ?? $"https://ui-avatars.com/api/?name={user.FullName}&background=FF5E00&color=fff",
-                    createdAt = user.CreatedAt
-                },
-                member = member != null ? new {
-                    gender = member.Gender,
-                    nationality = member.Nationality ?? "Việt Nam",
-                    dateOfBirth = member.DateOfBirth?.ToString("yyyy-MM-dd"),
-                    address = member.Address,
-                    idCard = member.IdCard,
-                    ptSessions = member.PtSessions,
-                    status = member.Status
-                } : null,
-                subscription = subscription != null ? new {
-                    packageName = subscription.Package?.Name,
-                    startDate = subscription.StartDate?.ToString("dd/MM/yyyy"),
-                    endDate = subscription.EndDate?.ToString("dd/MM/yyyy"),
-                    status = subscription.Status
-                } : null,
-                metrics = metrics != null ? new {
-                    weight = metrics.Weight ?? member?.Weight,
-                    height = member?.Height,
-                    bmi = metrics.Bmi ?? member?.Bmi,
-                    bodyFat = metrics.BodyFat ?? member?.BodyFat
-                } : new {
-                    weight = (decimal?)(member?.Weight ?? 0),
-                    height = (decimal?)(member?.Height ?? 0),
-                    bmi = (decimal?)(member?.Bmi ?? 0),
-                    bodyFat = (decimal?)(member?.BodyFat ?? 0)
-                },
-                history = attendance.Select(a => new {
-                    type = "Check-in",
-                    date = a.CheckInTime.ToString("dd/MM/yyyy"),
-                    status = "Check",
-                    stats = a.CheckOutTime.HasValue ? "OK" : "In"
-                }).Concat(payments.Select(p => new {
-                    type = "Payment",
-                    date = p.CreatedAt.ToString("dd/MM/yyyy"),
-                    status = "Paym",
-                    stats = p.Amount.ToString("N0") + " VNĐ"
-                })).OrderByDescending(x => x.date).Take(5).ToList()
-            });
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { 
+                    message = "Lỗi hệ thống khi tải hồ sơ", 
+                    details = ex.Message,
+                    inner = ex.InnerException?.Message,
+                    stack = ex.StackTrace 
+                });
+            }
         }
 
         [HttpPost("update")]

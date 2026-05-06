@@ -16,6 +16,14 @@ namespace GymApi.Entities
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
+        [MaxLength(100)]
+        [Column("created_by")]
+        public string? CreatedBy { get; set; }
+
+        [MaxLength(100)]
+        [Column("updated_by")]
+        public string? UpdatedBy { get; set; }
+
         [Column("is_deleted")]
         public bool IsDeleted { get; set; } = false;
 

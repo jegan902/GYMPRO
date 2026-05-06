@@ -26,8 +26,11 @@ class ProfileController extends Controller
             return view('admin.profile', compact('user'));
         }
 
+        $errorData = $response->json();
+        $errorMessage = $errorData['details'] ?? $errorData['message'] ?? 'Không thể tải thông tin hồ sơ!';
+        
         \Log::error('Profile API Error: ' . $response->status() . ' - ' . $response->body());
-        return redirect()->back()->with('error', 'Không thể tải thông tin hồ sơ! Lỗi: ' . $response->status());
+        return redirect()->back()->with('error', $errorMessage . ' (Lỗi: ' . $response->status() . ')');
     }
 
     /**
@@ -40,59 +43,45 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'newPassword' => 'nullable|string|min:6|confirmed',
             'avatarFile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gender' => 'nullable|string|in:male,female,other',
+            'nationality' => 'nullable|string|max:50',
+            'dateOfBirth' => 'nullable|date',
+            'address' => 'nullable|string|max:200',
+            'idCard' => 'nullable|string|max:20',
             'Weight' => 'nullable|numeric',
             'Height' => 'nullable|numeric',
             'Bmi' => 'nullable|numeric',
             'BodyFat' => 'nullable|numeric',
         ]);
 
-        $headers = [
+        $payload = [
+            'FullName' => $request->fullName,
+            'Phone' => $request->phone,
+            'NewPassword' => $request->newPassword,
+            'Gender' => $request->gender,
+            'Nationality' => $request->nationality,
+            'DateOfBirth' => $request->dateOfBirth,
+            'Address' => $request->address,
+            'IdCard' => $request->idCard,
+            'Weight' => $request->filled('Weight') ? (float)$request->Weight : null,
+            'Height' => $request->filled('Height') ? (float)$request->Height : null,
+            'Bmi' => $request->filled('Bmi') ? (float)$request->Bmi : null,
+            'BodyFat' => $request->filled('BodyFat') ? (float)$request->BodyFat : null,
+        ];
+
+        $client = \Illuminate\Support\Facades\Http::withHeaders([
             'Authorization' => 'Bearer ' . session('api_token'),
             'Accept' => 'application/json',
-        ];
-
-        $client = \Illuminate\Support\Facades\Http::withHeaders($headers);
-
-        $data = [
-            ['name' => 'FullName', 'contents' => $request->fullName],
-            ['name' => 'Phone', 'contents' => $request->phone ?? ''],
-            ['name' => 'NewPassword', 'contents' => $request->newPassword ?? ''],
-        ];
+        ]);
 
         if ($request->hasFile('avatarFile')) {
             $response = $client->attach(
                 'AvatarFile',
                 file_get_contents($request->file('avatarFile')->getRealPath()),
                 $request->file('avatarFile')->getClientOriginalName()
-            )->post('http://127.0.0.1:5083/api/v1/Profile/update', [
-                        'FullName' => $request->fullName,
-                        'Phone' => $request->phone,
-                        'NewPassword' => $request->newPassword,
-                        'Gender' => $request->gender,
-                        'Nationality' => $request->nationality,
-                        'DateOfBirth' => $request->dateOfBirth,
-                        'Address' => $request->address,
-                        'IdCard' => $request->idCard,
-                        'Weight' => (float) $request->Weight,
-                        'Height' => (float) $request->Height,
-                        'Bmi' => (float) $request->Bmi,
-                        'BodyFat' => (float) $request->BodyFat,
-                    ]);
+            )->post('http://127.0.0.1:5083/api/v1/Profile/update', $payload);
         } else {
-            $response = $client->asForm()->post('http://127.0.0.1:5083/api/v1/Profile/update', [
-                'FullName' => $request->fullName,
-                'Phone' => $request->phone,
-                'NewPassword' => $request->newPassword,
-                'Gender' => $request->gender,
-                'Nationality' => $request->nationality,
-                'DateOfBirth' => $request->dateOfBirth,
-                'Address' => $request->address,
-                'IdCard' => $request->idCard,
-                'Weight' => (float) $request->Weight,
-                'Height' => (float) $request->Height,
-                'Bmi' => (float) $request->Bmi,
-                'BodyFat' => (float) $request->BodyFat,
-            ]);
+            $response = $client->asForm()->post('http://127.0.0.1:5083/api/v1/Profile/update', $payload);
         }
 
         if ($response->successful()) {

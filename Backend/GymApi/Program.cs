@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using GymApi.Middlewares;
 using GymApi.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using GymApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,19 +68,24 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<IFileStorageService>(s => new LocalStorageService(builder.Environment.WebRootPath));
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
-    var databaseCreator = dbContext.GetService<IRelationalDatabaseCreator>();
     
     try {
-        if (!databaseCreator.Exists()) databaseCreator.Create();
-        if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+            var databaseCreator = dbContext.GetService<IRelationalDatabaseCreator>();
+            if (databaseCreator != null)
+            {
+                if (!databaseCreator.Exists()) databaseCreator.Create();
+                if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+            }
 
-        // Tự động Seed dữ liệu gốc (Roles, Permissions, Admin)
-        DataSeeder.SeedData(dbContext);
+            DataSeeder.SeedData(dbContext);
     } catch (Exception ex) {
         Console.WriteLine("Database initialization error: " + ex.Message);
     }
@@ -88,6 +94,8 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

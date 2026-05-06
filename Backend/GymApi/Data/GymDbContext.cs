@@ -53,6 +53,15 @@ namespace GymApi.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
+        public DbSet<EquipmentBrand> EquipmentBrands { get; set; }
+        public DbSet<EquipmentCategoryDim> EquipmentCategories { get; set; }
+        public DbSet<EquipmentSupplier> EquipmentSuppliers { get; set; }
+        public DbSet<EquipmentSpecification> EquipmentSpecifications { get; set; }
+        public DbSet<EquipmentSmartConfig> EquipmentSmartConfigs { get; set; }
+        public DbSet<EquipmentPurchaseHistory> EquipmentPurchases { get; set; }
+        public DbSet<EquipmentLocationHistory> EquipmentLocations { get; set; }
+        public DbSet<EquipmentMedia> EquipmentMediaFiles { get; set; }
+        public DbSet<MaintenanceLog> MaintenanceLogs { get; set; }
         public DbSet<Setting> Settings { get; set; }
 
         // Home Page Content
@@ -78,6 +87,62 @@ namespace GymApi.Data
                 .WithMany()
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipment>()
+                .HasOne(e => e.Brand)
+                .WithMany(b => b.Equipments)
+                .HasForeignKey(e => e.BrandId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipment>()
+                .HasOne(e => e.Category)
+                .WithMany(c => c.Equipments)
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipment>()
+                .HasOne(e => e.Supplier)
+                .WithMany(s => s.Equipments)
+                .HasForeignKey(e => e.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipment>()
+                .HasOne(e => e.Branch)
+                .WithMany()
+                .HasForeignKey(e => e.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipment>()
+                .HasIndex(e => e.CurrentLocationId);
+            modelBuilder.Entity<Equipment>()
+                .HasOne(e => e.CurrentLocation)
+                .WithMany()
+                .HasForeignKey(e => e.CurrentLocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Equipment>()
+                .Property(e => e.RowVersion).IsRowVersion();
+
+            modelBuilder.Entity<EquipmentLocationHistory>()
+                .HasOne(elh => elh.Branch)
+                .WithMany()
+                .HasForeignKey(elh => elh.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<EquipmentPurchaseHistory>()
+                .HasIndex(eph => eph.EquipmentId);
+
+            modelBuilder.Entity<EquipmentSmartConfig>()
+                .HasIndex(esc => esc.BleMacAddress).IsUnique();
+            modelBuilder.Entity<EquipmentSmartConfig>()
+                .HasIndex(esc => esc.IpAddress);
+
+            modelBuilder.Entity<EquipmentMedia>()
+                .HasIndex(em => em.EquipmentId);
+
+            modelBuilder.Entity<MaintenanceLog>()
+                .HasIndex(ml => ml.EquipmentId);
+            modelBuilder.Entity<MaintenanceLog>()
+                .HasIndex(ml => ml.RepairedAt);
 
             // Configure mapping for TIMESTAMP/DATETIME consistency if needed
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

@@ -134,7 +134,7 @@
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-light rounded-circle p-2" 
                                 onclick="openBranchModal({{ json_encode($branch) }})" title="Chỉnh sửa">
-                                <i class="bi bi-pencil"></i>
+                                <i class="bi bi-pencil text-info"></i>
                             </button>
                             <form action="{{ route('admin.branches.delete', $branch['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('Cảnh báo: Bạn có chắc chắn muốn xóa vĩnh viễn chi nhánh này không? Hành động này không thể hoàn tác!')">
                                 @csrf
@@ -155,7 +155,7 @@
 <!-- Modal Thêm/Sửa Chi Nhánh (Glassmorphism) -->
 <div class="modal fade" id="branchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; color: white;">
+        <div class="modal-content" style="background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             <div class="modal-header border-secondary border-opacity-25">
                 <h5 class="modal-title fw-bold" id="modalTitle">Thêm Chi Nhánh Mới</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -165,23 +165,23 @@
                 <input type="hidden" name="_method" id="formMethod" value="POST">
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Tên chi nhánh <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary" name="name" id="branchName" required placeholder="VD: Chi nhánh Quận 1...">
+                        <label class="form-label text-warning small text-uppercase fw-bold">Tên chi nhánh <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" name="name" id="branchName" required placeholder="VD: Chi nhánh Quận 1..." style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Địa chỉ</label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary" name="address" id="branchAddress" placeholder="Số nhà, đường, phường, quận...">
+                        <label class="form-label text-warning small text-uppercase fw-bold">Địa chỉ</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" name="address" id="branchAddress" placeholder="Số nhà, đường, phường, quận..." style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Số điện thoại</label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary" name="phone" id="branchPhone" placeholder="0901234567">
+                        <label class="form-label text-warning small text-uppercase fw-bold">Số điện thoại</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" name="phone" id="branchPhone" placeholder="0901234567" style="background-color: rgba(0,0,0,0.2) !important;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small text-uppercase fw-bold">Người Quản Lý</label>
-                        <select class="form-select bg-transparent text-white border-secondary" name="manager_id" id="branchManager">
-                            <option value="" class="text-dark">-- Chọn người quản lý --</option>
+                        <label class="form-label text-warning small text-uppercase fw-bold">Người Quản Lý</label>
+                        <select class="form-select bg-dark text-white border-secondary" name="manager_id" id="branchManager" style="background-color: rgba(0,0,0,0.2) !important;">
+                            <option value="" class="text-dark bg-white">-- Chọn người quản lý --</option>
                             @foreach($managers ?? [] as $manager)
-                                <option value="{{ $manager['id'] }}" class="text-dark">{{ $manager['name'] }}</option>
+                                <option value="{{ $manager['id'] }}" class="text-dark bg-white">{{ $manager['name'] }}</option>
                             @endforeach
                         </select>
                     </div>

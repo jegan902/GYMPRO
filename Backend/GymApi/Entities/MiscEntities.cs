@@ -163,46 +163,7 @@ namespace GymApi.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 
-    [Table("equipments")]
-    public class Equipment
-    {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
 
-        [Required]
-        [MaxLength(150)]
-        [Column("name")]
-        public string Name { get; set; } = string.Empty;
-
-        [MaxLength(100)]
-        [Column("category")]
-        public string? Category { get; set; }
-
-        [Column("status")]
-        public string Status { get; set; } = "active";
-
-        [Column("purchase_date")]
-        public DateTime? PurchaseDate { get; set; }
-
-        [Column("last_maintenance_date")]
-        public DateTime? LastMaintenanceDate { get; set; }
-
-        [Column("next_maintenance_date")]
-        public DateTime? NextMaintenanceDate { get; set; }
-
-        [Column("quantity")]
-        public int Quantity { get; set; } = 1;
-
-        [Column("note")]
-        public string? Note { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    }
 
     [Table("settings")]
     public class Setting

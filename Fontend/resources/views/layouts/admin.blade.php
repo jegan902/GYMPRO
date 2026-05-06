@@ -39,7 +39,7 @@
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 260px;
+            width: 200px;
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -51,14 +51,14 @@
         }
 
         .sidebar-brand {
-            padding: 20px 16px;
-            font-size: 1.25rem;
+            padding: 12px 16px;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--text-main);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             letter-spacing: -0.5px;
         }
 
@@ -74,13 +74,13 @@
 
         .nav-link {
             color: var(--text-muted);
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
             text-decoration: none;
         }
@@ -108,7 +108,7 @@
         /* --- MAIN CONTENT --- */
         .main-wrapper {
             flex-grow: 1;
-            margin-left: 260px;
+            margin-left: 200px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -116,14 +116,14 @@
 
         /* --- TOPBAR --- */
         .topbar {
-            height: 64px;
+            height: 48px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
+            padding: 0 16px;
             position: sticky;
             top: 0;
             z-index: 999;
@@ -151,14 +151,14 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 1.2rem;
+            font-size: 1rem;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             transition: all 0.2s;
         }
 
@@ -193,15 +193,15 @@
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             object-fit: cover;
         }
 
         /* --- CONTENT AREA --- */
         .content-area {
-            padding: 24px;
+            padding: 10px;
             flex-grow: 1;
         }
 
@@ -213,6 +213,15 @@
 
         .animate-fade-in {
             animation: fadeIn 0.4s ease-out forwards;
+        }
+        .dropdown-menu {
+            z-index: 2000 !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .dropdown-item:active {
+            background-color: var(--primary-color) !important;
         }
     </style>
     @stack('styles')
@@ -247,11 +256,13 @@
                     class="nav-link {{ request()->routeIs('admin.managers') ? 'active' : '' }}">
                     <i class="bi bi-person-badge"></i> Quản lý
                 </a>
-                <a href="#" class="nav-link" onclick="alert('Phát triển ở Phase sau!')">
+                <a href="{{ route('admin.equipments') }}"
+                    class="nav-link {{ request()->routeIs('admin.equipments*') ? 'active' : '' }}">
                     <i class="bi bi-bicycle"></i> Thiết bị
                 </a>
             @endif
 
+            {{-- 
             <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
                 style="font-size: 0.7rem; letter-spacing: 1px;">Management</div>
             <a href="#" class="nav-link" onclick="alert('Đang khóa!')">
@@ -260,6 +271,7 @@
             <a href="#" class="nav-link" onclick="alert('Cài Đặt...')">
                 <i class="bi bi-gear"></i> Cài Đặt
             </a>
+            --}}
         </div>
     </aside>
 
@@ -297,8 +309,8 @@
                             <div class="text-dim" style="font-size: 0.7rem;">{{ session('user_role') }}</div>
                         </div>
                     </div>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 py-2" style="font-size: 0.9rem;">
-                        <li><a class="dropdown-item py-2" href="{{ route('admin.profile') }}"><i class="bi bi-person me-2"></i> Hồ sơ</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 py-2" style="font-size: 0.9rem; min-width: 180px;">
+                        <li><a class="dropdown-item py-2" href="{{ route('admin.profile') }}" onclick="window.location.href='{{ route('admin.profile') }}'"><i class="bi bi-person me-2"></i> Hồ sơ cá nhân</a></li>
                         <li><hr class="dropdown-divider opacity-50"></li>
                         <li><a class="dropdown-item text-danger py-2" href="{{ route('logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
                     </ul>

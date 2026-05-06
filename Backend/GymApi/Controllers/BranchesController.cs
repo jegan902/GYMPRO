@@ -125,14 +125,13 @@ namespace GymApi.Controllers
             var branch = await _context.Branches.FindAsync(id);
             if (branch == null || branch.IsDeleted) return NotFound(new { message = "Branch not found" });
 
-            // [MỚI] Logic bàn giao: Đưa manager cũ về HQ nhưng GIỮ NGUYÊN vai trò Quản lý
+            // [MỚI] Logic bàn giao: Đưa manager cũ về Hệ thống (null) nhưng GIỮ NGUYÊN vai trò Quản lý
             if (branch.ManagerId.HasValue && branch.ManagerId != dto.ManagerId)
             {
                 var oldManager = await _context.Users.FindAsync(branch.ManagerId.Value);
                 if (oldManager != null)
                 {
-                    oldManager.BranchId = 1; // Đưa về Hệ thống (HQ)
-                    // Không đổi Role, vẫn là Branch Admin để làm quản lý dự phòng
+                    oldManager.BranchId = null; // Đưa về Hệ thống (Toàn hệ thống)
                 }
             }
 
