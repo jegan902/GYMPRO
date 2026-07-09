@@ -308,14 +308,16 @@
         <!-- Topbar -->
         <header class="topbar">
             <div class="branch-selector">
-                <select class="shadow-none" onchange="location.href='{{ route('admin.dashboard') }}?branch_id=' + this.value">
-                    <option value="">🌐 Toàn Hệ Thống</option>
-                    @foreach($branches ?? [] as $b)
-                        <option value="{{ $b['id'] }}" {{ (request('branch_id') == $b['id']) ? 'selected' : '' }}>
-                            📍 {{ $b['name'] }}
-                        </option>
-                    @endforeach
-                </select>
+            <select class="shadow-none" data-url="{{ route('admin.dashboard') }}" onchange="location.href=this.dataset.url + '?branch_id=' + this.value">
+                <option value="">🌐 Toàn Hệ Thống</option>
+                @foreach($branches ?? [] as $branch)
+                    @php
+                        $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                        $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                    @endphp
+                    <option value="{{ $bId }}" {{ request('branch_id') == $bId ? 'selected' : '' }}>📍 {{ $bName }}</option>
+                @endforeach
+            </select>
             </div>
 
             <div class="topbar-actions">
@@ -338,7 +340,7 @@
                         </div>
                     </div>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 py-2" style="font-size: 0.9rem; min-width: 180px;">
-                        <li><a class="dropdown-item py-2" href="{{ route('admin.profile') }}" onclick="window.location.href='{{ route('admin.profile') }}'"><i class="bi bi-person me-2"></i> Hồ sơ cá nhân</a></li>
+                        <li><a class="dropdown-item py-2" href="{{ route('admin.profile') }}"><i class="bi bi-person me-2"></i> Hồ sơ cá nhân</a></li>
                         <li><hr class="dropdown-divider opacity-50"></li>
                         <li><a class="dropdown-item text-danger py-2" href="{{ route('logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
                     </ul>

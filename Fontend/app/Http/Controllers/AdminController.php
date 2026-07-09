@@ -21,23 +21,37 @@ class AdminController extends Controller
     {
         $branch_id = $request->get('branch_id');
 
-        $response = $this->api->get('/v1/Dashboard/stats', ['branchId' => $branch_id]);
-        $stats = $response->successful() ? $response->json() : [
-            'total_members' => 0,
-            'monthly_revenue' => 0,
-            'today_classes' => 0,
-            'medical_alerts' => 0
-        ];
+        try {
+            $response = $this->api->get('/v1/Dashboard/stats', ['branchId' => $branch_id]);
+            $stats = $response->successful() ? $response->json() : null;
+        } catch (\Exception $e) {
+            \Log::error("Dashboard stats API error: " . $e->getMessage());
+            $stats = null;
+        }
+
+        if (!$stats) {
+            $stats = [
+                'total_members' => 0,
+                'monthly_revenue' => 0,
+                'today_classes' => 0,
+                'medical_alerts' => 0
+            ];
+        }
 
         // Lấy danh sách chi nhánh cho selector
-        $branchResponse = $this->api->get('/v1/Branches');
-        $branches = $branchResponse->successful() ? $branchResponse->json() : [];
+        try {
+            $branchResponse = $this->api->get('/v1/Branches');
+            $branches = $branchResponse->successful() ? $branchResponse->json() : [];
+        } catch (\Exception $e) {
+            \Log::error("Branches API error in dashboard: " . $e->getMessage());
+            $branches = [];
+        }
 
         $kpi = [
-            'total_members' => $stats['total_members'],
-            'monthly_revenue' => $stats['monthly_revenue'],
-            'today_classes' => $stats['today_classes'],
-            'medical_alerts' => $stats['medical_alerts']
+            'total_members' => data_get($stats, 'total_members') ?? data_get($stats, 'TotalMembers') ?? data_get($stats, 'totalMembers') ?? 0,
+            'monthly_revenue' => data_get($stats, 'monthly_revenue') ?? data_get($stats, 'MonthlyRevenue') ?? data_get($stats, 'monthlyRevenue') ?? 0,
+            'today_classes' => data_get($stats, 'today_classes') ?? data_get($stats, 'TodayClasses') ?? data_get($stats, 'todayClasses') ?? 0,
+            'medical_alerts' => data_get($stats, 'medical_alerts') ?? data_get($stats, 'MedicalAlerts') ?? data_get($stats, 'medicalAlerts') ?? 0
         ];
 
         $recent_alerts = [

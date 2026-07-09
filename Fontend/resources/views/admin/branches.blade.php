@@ -92,59 +92,69 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($branches as $branch)
-                    <tr>
-                        <td class="fw-bold text-muted" style="padding: 16px;">#{{ str_pad($branch['id'], 3, '0', STR_PAD_LEFT) }}</td>
-                        <td style="padding: 16px;">
-                            <div class="fw-bold" style="color: var(--text-main);">{{ $branch['name'] }}</div>
-                            <div class="small text-muted"><i class="bi bi-geo-alt-fill me-1 text-primary-orange"></i>{{ $branch['address'] }}</div>
-                        </td>
-                        <td style="padding: 16px;">
-                            @if($branch['manager'] == 'Chưa có quản lý')
-                                <span class="badge bg-light text-muted border">Chưa có quản lý</span>
-                            @else
-                                <div class="d-flex align-items-center gap-2">
-                                    @php
-                                        $mAvatar = $branch['manager_avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($branch['manager']) . '&background=FF5E00&color=fff');
-                                        if (str_starts_with($mAvatar, '/')) {
-                                            $mAvatar = config('services.backend.url_base') . $mAvatar;
-                                        }
-                                    @endphp
-                                    <img src="{{ $mAvatar }}" alt="Manager" class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid var(--border-color);">
-                                    <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
-                                        {{ !empty($branch['manager']) ? $branch['manager'] : 'Quản trị viên' }}
-                                    </span>
+                    @foreach($branches ?? [] as $branch)
+                        @php
+                            $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                            $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                            $bAddress = data_get($branch, 'address') ?? data_get($branch, 'Address');
+                            $bManager = data_get($branch, 'manager') ?? data_get($branch, 'Manager');
+                            $bManagerAvatar = data_get($branch, 'manager_avatar') ?? data_get($branch, 'ManagerAvatar');
+                            $bMembersCount = data_get($branch, 'members_count') ?? data_get($branch, 'MembersCount') ?? 0;
+                            $bRevenue = data_get($branch, 'revenue') ?? data_get($branch, 'Revenue');
+                            $bStatus = data_get($branch, 'status') ?? data_get($branch, 'Status');
+                        @endphp
+                        <tr>
+                            <td class="fw-bold text-muted" style="padding: 16px;">#{{ str_pad($bId, 3, '0', STR_PAD_LEFT) }}</td>
+                            <td style="padding: 16px;">
+                                <div class="fw-bold" style="color: var(--text-main);">{{ $bName }}</div>
+                                <div class="small text-muted"><i class="bi bi-geo-alt-fill me-1 text-primary-orange"></i>{{ $bAddress }}</div>
+                            </td>
+                            <td style="padding: 16px;">
+                                @if($bManager == 'Chưa có quản lý' || empty($bManager))
+                                    <span class="badge bg-light text-muted border">Chưa có quản lý</span>
+                                @else
+                                    <div class="d-flex align-items-center gap-2">
+                                        @php
+                                            $mAvatar = $bManagerAvatar ?? ('https://ui-avatars.com/api/?name=' . urlencode($bManager) . '&background=FF5E00&color=fff');
+                                            if (str_starts_with($mAvatar, '/')) {
+                                                $mAvatar = config('services.backend.url_base') . $mAvatar;
+                                            }
+                                        @endphp
+                                        <img src="{{ $mAvatar }}" alt="Manager" class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid var(--border-color);">
+                                        <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
+                                            {{ $bManager }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </td>
+                            <td style="padding: 16px;">
+                                <div class="small"><i class="bi bi-people-fill text-primary me-1"></i> {{ number_format($bMembersCount) }} hội viên</div>
+                                <div class="small"><i class="bi bi-currency-dollar text-success me-1"></i> {{ $bRevenue }}</div>
+                            </td>
+                            <td style="padding: 16px;">
+                                <div class="form-check form-switch fs-6">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="switch{{ $bId }}" 
+                                        {{ $bStatus == 'active' ? 'checked' : '' }}
+                                        onchange="toggleBranchStatus({{ $bId }}, this.checked)">
+                                    <label class="form-check-label ms-2 small" for="switch{{ $bId }}" id="label{{ $bId }}" style="margin-top: 2px;">
+                                        {!! $bStatus == 'active' ? '<span class="text-success fw-bold">Hoạt động</span>' : '<span class="text-danger fw-bold">Tạm ngưng</span>' !!}
+                                    </label>
                                 </div>
-                            @endif
-                        </td>
-                        <td style="padding: 16px;">
-                            <div class="small"><i class="bi bi-people-fill text-primary me-1"></i> {{ number_format($branch['members_count']) }} hội viên</div>
-                            <div class="small"><i class="bi bi-currency-dollar text-success me-1"></i> {{ $branch['revenue'] }}</div>
-                        </td>
-                        <td style="padding: 16px;">
-                            <div class="form-check form-switch fs-6">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switch{{ $branch['id'] }}" 
-                                    {{ $branch['status'] == 'active' ? 'checked' : '' }}
-                                    onchange="toggleBranchStatus({{ $branch['id'] }}, this.checked)">
-                                <label class="form-check-label ms-2 small" for="switch{{ $branch['id'] }}" id="label{{ $branch['id'] }}" style="margin-top: 2px;">
-                                    {!! $branch['status'] == 'active' ? '<span class="text-success fw-bold">Hoạt động</span>' : '<span class="text-danger fw-bold">Tạm ngưng</span>' !!}
-                                </label>
-                            </div>
-                        </td>
-                        <td class="text-end" style="padding: 16px;">
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle p-2" 
-                                onclick="openBranchModal({{ json_encode($branch) }})" title="Chỉnh sửa">
-                                <i class="bi bi-pencil text-info"></i>
-                            </button>
-                            <form action="{{ route('admin.branches.delete', $branch['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('Cảnh báo: Bạn có chắc chắn muốn xóa vĩnh viễn chi nhánh này không? Hành động này không thể hoàn tác!')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-2 ms-1" title="Xóa">
-                                    <i class="bi bi-trash"></i>
+                            </td>
+                            <td class="text-end" style="padding: 16px;">
+                                <button class="btn btn-sm btn-outline-secondary rounded-circle p-2" 
+                                    onclick="openBranchModal({{ json_encode($branch) }})" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil text-info"></i>
                                 </button>
-                            </form>
-                        </td>
-                    </tr>
+                                <form action="{{ route('admin.branches.delete', $bId) }}" method="POST" class="d-inline" onsubmit="return confirm('Cảnh báo: Bạn có chắc chắn muốn xóa vĩnh viễn chi nhánh này không? Hành động này không thể hoàn tác!')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-2 ms-1" title="Xóa">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

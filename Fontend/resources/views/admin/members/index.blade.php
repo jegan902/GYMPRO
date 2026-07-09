@@ -286,7 +286,11 @@
                 <select name="branchId" class="form-select form-select-sm bg-light" onchange="this.form.submit()">
                     <option value="">Tất cả chi nhánh</option>
                     @foreach($branches as $b)
-                        <option value="{{ $b['id'] }}" {{ request('branchId') == $b['id'] ? 'selected' : '' }}>📍 {{ $b['name'] }}</option>
+                        @php
+                            $bId = data_get($b, 'id') ?? data_get($b, 'Id');
+                            $bName = data_get($b, 'name') ?? data_get($b, 'Name');
+                        @endphp
+                        <option value="{{ $bId }}" {{ request('branchId') == $bId ? 'selected' : '' }}>📍 {{ $bName }}</option>
                     @endforeach
                 </select>
             </div>

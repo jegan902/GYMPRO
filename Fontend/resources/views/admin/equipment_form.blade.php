@@ -80,8 +80,12 @@
                                         <div class="form-group">
                                             <label class="font-weight-bold">Chi nhánh <small class="text-danger">*</small></label>
                                             <select name="branch_id" class="form-control" required>
-                                                @foreach($branches as $branch)
-                                                    <option value="{{ $branch['id'] }}" {{ ($equipment['branchId'] ?? '') == $branch['id'] ? 'selected' : '' }}>{{ $branch['name'] }}</option>
+                                                @foreach($branches ?? [] as $branch)
+                                                    @php
+                                                        $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                                                        $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                                                    @endphp
+                                                    <option value="{{ $bId }}" {{ ($equipment['branchId'] ?? '') == $bId ? 'selected' : '' }}>{{ $bName }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

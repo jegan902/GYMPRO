@@ -562,8 +562,8 @@
                     @if(isset($branches) && count($branches) > 0)
                         @foreach($branches as $branch)
                             @php
-                                $bName = $branch['name'] ?? $branch['Name'] ?? 'Chi nhánh';
-                                $bId = $branch['id'] ?? $branch['Id'] ?? 0;
+                                $bName = data_get($branch, 'name') ?? data_get($branch, 'Name') ?? 'Chi nhánh';
+                                $bId = data_get($branch, 'id') ?? data_get($branch, 'Id') ?? 0;
                             @endphp
                             <option value="{{ $bId }}" {{ request('branchId') == $bId ? 'selected' : '' }}>
                                 {{ $bName }}

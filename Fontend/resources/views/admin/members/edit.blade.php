@@ -182,7 +182,11 @@
                     <select name="branchId" class="form-select">
                         <option value="">Chọn chi nhánh</option>
                         @foreach($branches as $b)
-                            <option value="{{ $b['id'] }}" {{ old('branchId', $member['branchId']) == $b['id'] ? 'selected' : '' }}>{{ $b['name'] }}</option>
+                            @php
+                                $bId = data_get($b, 'id') ?? data_get($b, 'Id');
+                                $bName = data_get($b, 'name') ?? data_get($b, 'Name');
+                            @endphp
+                            <option value="{{ $bId }}" {{ old('branchId', $member['branchId']) == $bId ? 'selected' : '' }}>{{ $bName }}</option>
                         @endforeach
                     </select>
                 </div>

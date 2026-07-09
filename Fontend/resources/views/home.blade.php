@@ -177,7 +177,7 @@
         }
         .hero-title span {
             background: var(--red-gradient);
-            -webkit-background-clip: text;
+            /* -webkit-background-clip: text; */
             -webkit-text-fill-color: transparent;
         }
         .hero-lead {
@@ -1115,27 +1115,41 @@
             @else
                 <!-- Branch Selector Tab Buttons -->
                 <div class="branch-tabs">
-                    @foreach($branches as $index => $branch)
-                        <button class="branch-tab-btn {{ $index === 0 ? 'active' : '' }}" onclick="switchBranch(event, 'branch-tab-{{ $branch['id'] }}')">
-                            <i class="bi bi-geo-alt-fill me-2"></i> {{ $branch['name'] }}
+                    @foreach($branches ?? [] as $index => $branch)
+                        @php
+                            $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                            $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                        @endphp
+                        <button class="branch-tab-btn {{ $index === 0 ? 'active' : '' }}" onclick="switchBranch(event, 'branch-tab-{{ $bId }}')">
+                            <i class="bi bi-geo-alt-fill me-2"></i> {{ $bName }}
                         </button>
                     @endforeach
                 </div>
 
                 <!-- Branch Contents -->
-                @foreach($branches as $index => $branch)
-                    <div class="branch-content-panel {{ $index === 0 ? '' : 'd-none' }}" id="branch-tab-{{ $branch['id'] }}">
+                @foreach($branches ?? [] as $index => $branch)
+                    @php
+                        $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                        $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                        $bAddress = data_get($branch, 'address') ?? data_get($branch, 'Address');
+                        $bPhone = data_get($branch, 'phone') ?? data_get($branch, 'Phone');
+                        $bMembersCount = data_get($branch, 'members_count') ?? data_get($branch, 'MembersCount') ?? 0;
+                        $bIsActive = data_get($branch, 'is_active') ?? data_get($branch, 'IsActive');
+                        $bManager = data_get($branch, 'manager') ?? data_get($branch, 'Manager');
+                        $bManagerAvatar = data_get($branch, 'manager_avatar') ?? data_get($branch, 'ManagerAvatar');
+                    @endphp
+                    <div class="branch-content-panel {{ $index === 0 ? '' : 'd-none' }}" id="branch-tab-{{ $bId }}">
                         <div class="branch-portal-grid">
                             <!-- Left: Branch details -->
                             <div class="premium-card d-flex flex-column justify-content-between">
                                 <div>
-                                    <h3 class="fw-bold text-dark mb-4"><i class="bi bi-building-fill text-danger me-2"></i>{{ $branch['name'] }}</h3>
+                                    <h3 class="fw-bold text-dark mb-4"><i class="bi bi-building-fill text-danger me-2"></i>{{ $bName }}</h3>
                                     
                                     <div class="branch-meta-item">
                                         <div class="branch-meta-icon"><i class="bi bi-map"></i></div>
                                         <div>
                                             <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Địa chỉ</div>
-                                            <div class="text-dark fw-bold">{{ $branch['address'] }}</div>
+                                            <div class="text-dark fw-bold">{{ $bAddress }}</div>
                                         </div>
                                     </div>
 
@@ -1143,7 +1157,7 @@
                                         <div class="branch-meta-icon"><i class="bi bi-telephone"></i></div>
                                         <div>
                                             <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Hotline chi nhánh</div>
-                                            <div class="text-dark fw-bold">{{ $branch['phone'] ?? 'Chưa cập nhật' }}</div>
+                                            <div class="text-dark fw-bold">{{ $bPhone ?? 'Chưa cập nhật' }}</div>
                                         </div>
                                     </div>
 
@@ -1151,14 +1165,14 @@
                                         <div class="branch-meta-icon"><i class="bi bi-people"></i></div>
                                         <div>
                                             <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Hội viên hoạt động</div>
-                                            <div class="text-dark fw-bold">{{ $branch['members_count'] }} hội viên</div>
+                                            <div class="text-dark fw-bold">{{ $bMembersCount }} hội viên</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mt-4 pt-3 border-top border-secondary d-flex align-items-center justify-content-between">
                                     <span class="small text-muted">Trạng thái CMS</span>
-                                    @if($branch['is_active'])
+                                    @if($bIsActive)
                                         <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-check-circle-fill me-1"></i> Đang mở cửa</span>
                                     @else
                                         <span class="badge bg-secondary px-3 py-2 rounded-pill"><i class="bi bi-dash-circle-fill me-1"></i> Đang bảo trì</span>
@@ -1173,10 +1187,10 @@
                                     Quản lý chi nhánh (Branch Admin)
                                 </div>
                                 <div class="manager-card mb-5">
-                                    <img src="{{ $branch['manager_avatar'] ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }}" 
+                                    <img src="{{ $bManagerAvatar ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }}" 
                                          alt="Manager Avatar" class="staff-avatar">
                                     <div>
-                                        <h4 class="fw-bold text-dark mb-1">{{ $branch['manager'] }}</h4>
+                                        <h4 class="fw-bold text-dark mb-1">{{ $bManager }}</h4>
                                         <span class="role-badge badge-mgr mb-2">Branch Admin / Manager</span>
                                         <div class="text-muted small"><i class="bi bi-envelope me-2"></i>Dữ liệu quản trị được chỉ định chính thức từ CMS.</div>
                                     </div>
@@ -1188,8 +1202,8 @@
                                 </div>
                                 
                                 @php
-                                    $branchStaff = collect($staff)->filter(function($u) use ($branch) {
-                                        return $u['branch_id'] == $branch['id'] && in_array($u['role_name'], ['Staff/PT', 'PT', 'Staff']);
+                                    $branchStaff = collect($staff)->filter(function($u) use ($bId) {
+                                        return data_get($u, 'branch_id') == $bId && in_array(data_get($u, 'role_name'), ['Staff/PT', 'PT', 'Staff']);
                                     });
                                 @endphp
 
@@ -1201,12 +1215,17 @@
                                 @else
                                     <div class="staff-grid">
                                         @foreach($branchStaff as $pt)
+                                            @php
+                                                $ptAvatar = data_get($pt, 'avatar');
+                                                $ptFullName = data_get($pt, 'full_name');
+                                                $ptEmail = data_get($pt, 'email');
+                                            @endphp
                                             <div class="staff-card">
-                                                <img src="{{ $pt['avatar'] ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200' }}" 
+                                                <img src="{{ $ptAvatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200' }}" 
                                                      alt="PT Avatar" class="staff-avatar">
-                                                <h5 class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">{{ $pt['full_name'] }}</h5>
+                                                <h5 class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">{{ $ptFullName }}</h5>
                                                 <span class="role-badge badge-pt mb-2">Personal Trainer</span>
-                                                <div class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-envelope-fill me-1"></i>{{ $pt['email'] }}</div>
+                                                <div class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-envelope-fill me-1"></i>{{ $ptEmail }}</div>
                                             </div>
                                         @endforeach
                                     </div>

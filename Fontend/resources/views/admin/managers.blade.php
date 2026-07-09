@@ -164,8 +164,12 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label text-secondary small text-uppercase fw-bold">Vai trò</label>
                             <select class="form-select text-dark border-secondary-subtle" name="role_id" id="managerRoleId">
-                                @foreach($roles as $role)
-                                    <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
+                                @foreach($roles ?? [] as $role)
+                                    @php
+                                        $rId = data_get($role, 'id') ?? data_get($role, 'Id');
+                                        $rName = data_get($role, 'name') ?? data_get($role, 'Name');
+                                    @endphp
+                                    <option value="{{ $rId }}">{{ $rName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -173,8 +177,12 @@
                             <label class="form-label text-secondary small text-uppercase fw-bold">Chi nhánh</label>
                             <select class="form-select text-dark border-secondary-subtle" name="branch_id" id="managerBranchId">
                                 <option value="">-- Tất cả chi nhánh --</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{ $branch['id'] }}">{{ $branch['name'] }}</option>
+                                @foreach($branches ?? [] as $branch)
+                                    @php
+                                        $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
+                                        $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
+                                    @endphp
+                                    <option value="{{ $bId }}">{{ $bName }}</option>
                                 @endforeach
                             </select>
                         </div>
