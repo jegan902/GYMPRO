@@ -67,72 +67,72 @@
     <!-- Tiêu đề -->
     <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
         <div>
-            <h2 class="fw-bold mb-1 text-warning"><i class="bi bi-building me-2"></i> Quản Lý Chi Nhánh</h2>
+            <h2 class="fw-bold mb-1" style="color: var(--text-main);"><i class="bi bi-building me-2 text-primary-orange"></i> Quản Lý Chi Nhánh</h2>
             <p class="text-muted mb-0">Quản trị tối cao: Thêm, sửa, xóa và quản lý tất cả chi nhánh thuộc hệ thống GymPro.</p>
         </div>
         <div>
-            <button class="btn btn-warning fw-bold shadow-sm" onclick="openBranchModal()" style="border-radius: 10px; padding: 10px 20px;">
+            <button class="btn fw-bold shadow-sm text-white" onclick="openBranchModal()" style="background-color: var(--primary-color); border: none; border-radius: 4px; padding: 10px 20px;">
                 <i class="bi bi-plus-lg me-2"></i> Thêm Chi Nhánh
             </button>
         </div>
     </div>
 
     <!-- Table Card -->
-    <div class="glass-card animate-fade-in" style="animation-delay: 0.2s;">
+    <div class="card border-0 shadow-sm animate-fade-in" style="animation-delay: 0.2s; background: white; border-radius: 8px; overflow: hidden;">
         <div class="table-responsive">
             <table class="table table-glass mb-0">
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Chi Nhánh</th>
-                        <th>Quản Lý (Manager)</th>
-                        <th>Thống Kê</th>
-                        <th>Trạng Thái</th>
-                        <th class="text-end">Hành Động</th>
+                    <tr style="background: #F8FAFC;">
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">ID</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Chi Nhánh</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Quản Lý (Manager)</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Thống Kê</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Trạng Thái</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;" class="text-end">Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($branches as $branch)
                     <tr>
-                        <td class="fw-bold text-muted">#{{ str_pad($branch['id'], 3, '0', STR_PAD_LEFT) }}</td>
-                        <td>
-                            <div class="fw-bold" style="color: #1e293b;">{{ $branch['name'] }}</div>
-                            <div class="small text-muted"><i class="bi bi-geo-alt-fill me-1"></i>{{ $branch['address'] }}</div>
+                        <td class="fw-bold text-muted" style="padding: 16px;">#{{ str_pad($branch['id'], 3, '0', STR_PAD_LEFT) }}</td>
+                        <td style="padding: 16px;">
+                            <div class="fw-bold" style="color: var(--text-main);">{{ $branch['name'] }}</div>
+                            <div class="small text-muted"><i class="bi bi-geo-alt-fill me-1 text-primary-orange"></i>{{ $branch['address'] }}</div>
                         </td>
-                        <td>
+                        <td style="padding: 16px;">
                             @if($branch['manager'] == 'Chưa có quản lý')
-                                <span class="badge bg-secondary text-light">Chưa có quản lý</span>
+                                <span class="badge bg-light text-muted border">Chưa có quản lý</span>
                             @else
                                 <div class="d-flex align-items-center gap-2">
                                     @php
-                                        $mAvatar = $branch['manager_avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($branch['manager']) . '&background=F1C40F&color=fff');
+                                        $mAvatar = $branch['manager_avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($branch['manager']) . '&background=FF5E00&color=fff');
                                         if (str_starts_with($mAvatar, '/')) {
                                             $mAvatar = config('services.backend.url_base') . $mAvatar;
                                         }
                                     @endphp
-                                    <img src="{{ $mAvatar }}" alt="Manager" class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid rgba(0,0,0,0.1);">
-                                    <span class="fw-bold" style="font-size: 0.9rem; color: #1e293b;">
+                                    <img src="{{ $mAvatar }}" alt="Manager" class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid var(--border-color);">
+                                    <span class="fw-bold" style="font-size: 0.9rem; color: var(--text-main);">
                                         {{ !empty($branch['manager']) ? $branch['manager'] : 'Quản trị viên' }}
                                     </span>
                                 </div>
                             @endif
                         </td>
-                        <td>
+                        <td style="padding: 16px;">
                             <div class="small"><i class="bi bi-people-fill text-primary me-1"></i> {{ number_format($branch['members_count']) }} hội viên</div>
                             <div class="small"><i class="bi bi-currency-dollar text-success me-1"></i> {{ $branch['revenue'] }}</div>
                         </td>
-                        <td>
-                            <div class="form-check form-switch fs-5">
+                        <td style="padding: 16px;">
+                            <div class="form-check form-switch fs-6">
                                 <input class="form-check-input" type="checkbox" role="switch" id="switch{{ $branch['id'] }}" 
                                     {{ $branch['status'] == 'active' ? 'checked' : '' }}
                                     onchange="toggleBranchStatus({{ $branch['id'] }}, this.checked)">
-                                <label class="form-check-label ms-2 small" for="switch{{ $branch['id'] }}" id="label{{ $branch['id'] }}" style="margin-top: 3px;">
+                                <label class="form-check-label ms-2 small" for="switch{{ $branch['id'] }}" id="label{{ $branch['id'] }}" style="margin-top: 2px;">
                                     {!! $branch['status'] == 'active' ? '<span class="text-success fw-bold">Hoạt động</span>' : '<span class="text-danger fw-bold">Tạm ngưng</span>' !!}
                                 </label>
                             </div>
                         </td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-light rounded-circle p-2" 
+                        <td class="text-end" style="padding: 16px;">
+                            <button class="btn btn-sm btn-outline-secondary rounded-circle p-2" 
                                 onclick="openBranchModal({{ json_encode($branch) }})" title="Chỉnh sửa">
                                 <i class="bi bi-pencil text-info"></i>
                             </button>
@@ -152,47 +152,47 @@
     </div>
 </div>
 
-<!-- Modal Thêm/Sửa Chi Nhánh (Glassmorphism) -->
+<!-- Modal Thêm/Sửa Chi Nhánh (Light Mode) -->
 <div class="modal fade" id="branchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <div class="modal-header border-secondary border-opacity-25">
+        <div class="modal-content" style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+            <div class="modal-header border-bottom">
                 <h5 class="modal-title fw-bold" id="modalTitle">Thêm Chi Nhánh Mới</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="branchForm" method="POST" action="{{ route('admin.branches.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Tên chi nhánh <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" name="name" id="branchName" required placeholder="VD: Chi nhánh Quận 1..." style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Tên chi nhánh <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control text-dark border-secondary-subtle" name="name" id="branchName" required placeholder="VD: Chi nhánh Quận 1...">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Địa chỉ</label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" name="address" id="branchAddress" placeholder="Số nhà, đường, phường, quận..." style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Địa chỉ</label>
+                        <input type="text" class="form-control text-dark border-secondary-subtle" name="address" id="branchAddress" placeholder="Số nhà, đường, phường, quận...">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Số điện thoại</label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" name="phone" id="branchPhone" placeholder="0901234567" style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Số điện thoại</label>
+                        <input type="text" class="form-control text-dark border-secondary-subtle" name="phone" id="branchPhone" placeholder="0901234567">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Người Quản Lý</label>
-                        <select class="form-select bg-dark text-white border-secondary" name="manager_id" id="branchManager" style="background-color: rgba(0,0,0,0.2) !important;">
-                            <option value="" class="text-dark bg-white">-- Chọn người quản lý --</option>
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Người Quản Lý</label>
+                        <select class="form-select text-dark border-secondary-subtle" name="manager_id" id="branchManager">
+                            <option value="">-- Chọn người quản lý --</option>
                             @foreach($managers ?? [] as $manager)
-                                <option value="{{ $manager['id'] }}" class="text-dark bg-white">{{ $manager['name'] }}</option>
+                                <option value="{{ $manager['id'] }}">{{ $manager['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-check form-switch mt-4 fs-5">
+                    <div class="form-check form-switch mt-4 fs-6">
                         <input class="form-check-input" type="checkbox" role="switch" id="branchStatus" name="is_active" checked>
-                        <label class="form-check-label ms-2 text-white" for="branchStatus" style="font-size: 1rem;">Hoạt động ngay</label>
+                        <label class="form-check-label ms-2 text-dark" for="branchStatus" style="font-size: 0.95rem;">Hoạt động ngay</label>
                     </div>
                 </div>
-                <div class="modal-footer border-secondary border-opacity-25">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-warning fw-bold"><i class="bi bi-save me-1"></i> Lưu Dữ Liệu</button>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn fw-bold text-white" style="background-color: var(--primary-color); border:none;"><i class="bi bi-save me-1"></i> Lưu Dữ Liệu</button>
                 </div>
             </form>
         </div>

@@ -76,6 +76,41 @@ namespace GymApi.Data
                 context.SaveChanges();
             }
 
+            // Seed Packages
+            if (!context.Packages.Any())
+            {
+                context.Packages.AddRange(
+                    new Package
+                    {
+                        Name = "Gói Standard 30 Ngày",
+                        Duration = 30,
+                        Price = 350000,
+                        Description = "Phù hợp cho người tập tự do cơ bản.",
+                        Features = "Tập luyện không giới hạn,Tủ đồ cá nhân,Hỗ trợ nước uống",
+                        IsActive = true
+                    },
+                    new Package
+                    {
+                        Name = "Gói Pro 90 Ngày",
+                        Duration = 90,
+                        Price = 900000,
+                        Description = "Gói tập phổ biến được nhiều người lựa chọn nhất.",
+                        Features = "Tập luyện không giới hạn,Tủ đồ cá nhân,Hỗ trợ nước uống,1 Buổi hướng dẫn cùng PT,Đo BMI/BMR định kỳ",
+                        IsActive = true
+                    },
+                    new Package
+                    {
+                        Name = "Gói VIP Elite 1 Năm",
+                        Duration = 365,
+                        Price = 3600000,
+                        Description = "Trải nghiệm không giới hạn dịch vụ cao cấp nhất tại GymPro.",
+                        Features = "Tập luyện không giới hạn,Tủ đồ cá nhân VIP,Nước uống thể thao miễn phí,10 Buổi PT riêng chuyên sâu,Bể sục & Phòng xông hơi,Đỗ xe ô tô miễn phí",
+                        IsActive = true
+                    }
+                );
+                context.SaveChanges();
+            }
+
             SeedEquipmentData(context);
         }
 

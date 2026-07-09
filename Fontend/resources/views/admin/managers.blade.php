@@ -52,69 +52,69 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #ffc107;"><i class="bi bi-person-badge me-2"></i> Quản Lý Nhân Sự</h2>
+            <h2 class="fw-bold mb-1" style="color: var(--text-main);"><i class="bi bi-person-badge me-2 text-primary-orange"></i> Quản Lý Nhân Sự</h2>
             <p class="text-muted mb-0">Quản trị tối cao: Quản lý danh sách quản lý chi nhánh và nhân viên hệ thống.</p>
         </div>
         <div>
-            <button class="btn btn-warning fw-bold shadow-sm" onclick="openManagerModal()" style="border-radius: 10px; padding: 10px 20px;">
-                <i class="bi bi-person-plus-fill me-2"></i> Thêm Quản Lý
+            <button class="btn fw-bold shadow-sm text-white" onclick="openManagerModal()" style="background-color: var(--primary-color); border: none; border-radius: 4px; padding: 10px 20px;">
+                <i class="bi bi-person-plus-fill me-2"></i> Thêm Nhân Sự
             </button>
         </div>
     </div>
 
     <!-- Table -->
-    <div class="glass-card animate-fade-in" style="animation-delay: 0.2s;">
+    <div class="card border-0 shadow-sm animate-fade-in" style="animation-delay: 0.2s; background: white; border-radius: 8px; overflow: hidden;">
         <div class="table-responsive">
             <table class="table table-glass mb-0">
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nhân Viên</th>
-                        <th>Vai Trò</th>
-                        <th>Chi Nhánh</th>
-                        <th>Trạng Thái</th>
-                        <th class="text-end">Hành Động</th>
+                    <tr style="background: #F8FAFC;">
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">ID</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Nhân Viên</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Vai Trò</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Chi Nhánh</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;">Trạng Thái</th>
+                        <th style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 16px;" class="text-end">Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($managers as $manager)
                     <tr>
-                        <td class="fw-bold text-muted">#{{ str_pad($manager['id'], 3, '0', STR_PAD_LEFT) }}</td>
-                        <td>
+                        <td class="fw-bold text-muted" style="padding: 16px;">#{{ str_pad($manager['id'], 3, '0', STR_PAD_LEFT) }}</td>
+                        <td style="padding: 16px;">
                             <div class="d-flex align-items-center gap-3">
                                 @php
-                                    $avatar = $manager['avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($manager['full_name']) . '&background=F39C12&color=fff');
+                                    $avatar = $manager['avatar'] ?? ('https://ui-avatars.com/api/?name=' . urlencode($manager['full_name']) . '&background=FF5E00&color=fff');
                                     if (str_starts_with($avatar, '/')) {
                                         $avatar = config('services.backend.url_base') . $avatar;
                                     }
                                 @endphp
-                                <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle" width="38" height="38" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
+                                <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle" width="38" height="38" style="object-fit: cover; border: 1px solid var(--border-color);">
                                 <div>
-                                    <div class="fw-bold" style="color: #1e293b;">{{ !empty($manager['full_name']) ? $manager['full_name'] : 'Quản trị viên' }}</div>
+                                    <div class="fw-bold" style="color: var(--text-main);">{{ !empty($manager['full_name']) ? $manager['full_name'] : 'Quản trị viên' }}</div>
                                     <div class="small text-muted">{{ $manager['email'] }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td style="padding: 16px;">
                             <span class="badge {{ $manager['role_name'] == 'Super Admin' ? 'bg-warning text-dark' : 'bg-info text-white' }} p-2">
                                 <i class="bi bi-shield-lock me-1"></i> {{ $manager['role_name'] }}
                             </span>
                         </td>
-                        <td>
-                            <div style="color: #1e293b;"><i class="bi bi-building me-1"></i> {{ $manager['branch_name'] }}</div>
+                        <td style="padding: 16px;">
+                            <div style="color: var(--text-main);"><i class="bi bi-building me-1 text-primary-orange"></i> {{ $manager['branch_name'] }}</div>
                         </td>
-                        <td>
-                            <div class="form-check form-switch fs-5">
+                        <td style="padding: 16px;">
+                            <div class="form-check form-switch fs-6">
                                 <input class="form-check-input" type="checkbox" role="switch" id="switch{{ $manager['id'] }}" 
                                     {{ $manager['is_active'] ? 'checked' : '' }}
                                     onchange="toggleManagerStatus({{ $manager['id'] }}, this.checked)">
-                                <label class="form-check-label ms-2 small" for="switch{{ $manager['id'] }}" id="label{{ $manager['id'] }}" style="margin-top: 3px;">
+                                <label class="form-check-label ms-2 small" for="switch{{ $manager['id'] }}" id="label{{ $manager['id'] }}" style="margin-top: 2px;">
                                     {!! $manager['is_active'] ? '<span class="text-success fw-bold" style="font-size: 0.8rem;">Đang hoạt động</span>' : '<span class="text-danger fw-bold" style="font-size: 0.8rem;">Tạm ngưng</span>' !!}
                                 </label>
                             </div>
                         </td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-light rounded-circle p-2" 
+                        <td class="text-end" style="padding: 16px;">
+                            <button class="btn btn-sm btn-outline-secondary rounded-circle p-2" 
                                 onclick="openManagerModal({{ json_encode($manager) }})" title="Chỉnh sửa">
                                 <i class="bi bi-pencil text-info"></i>
                             </button>
@@ -139,54 +139,54 @@
 <!-- Modal Thêm/Sửa Quản Lý -->
 <div class="modal fade" id="managerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <div class="modal-header border-secondary border-opacity-25">
+        <div class="modal-content" style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+            <div class="modal-header border-bottom">
                 <h5 class="modal-title fw-bold" id="modalTitle">Thêm Quản Lý Mới</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="managerForm" method="POST" action="{{ route('admin.managers.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Họ và tên <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control bg-dark text-white border-secondary" name="full_name" id="managerFullName" required style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control text-dark border-secondary-subtle" name="full_name" id="managerFullName" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control bg-dark text-white border-secondary" name="email" id="managerEmail" required style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control text-dark border-secondary-subtle" name="email" id="managerEmail" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning small text-uppercase fw-bold">Mật khẩu <span id="pwdLabel"></span></label>
-                        <input type="password" class="form-control bg-dark text-white border-secondary" name="password" id="managerPassword" placeholder="Nhập để đặt mật khẩu mới..." style="background-color: rgba(0,0,0,0.2) !important;">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Mật khẩu <span id="pwdLabel" class="text-danger small font-monospace"></span></label>
+                        <input type="password" class="form-control text-dark border-secondary-subtle" name="password" id="managerPassword" placeholder="Nhập để đặt mật khẩu mới...">
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-warning small text-uppercase fw-bold">Vai trò</label>
-                            <select class="form-select bg-dark text-white border-secondary" name="role_id" id="managerRoleId" style="background-color: rgba(0,0,0,0.2) !important;">
+                            <label class="form-label text-secondary small text-uppercase fw-bold">Vai trò</label>
+                            <select class="form-select text-dark border-secondary-subtle" name="role_id" id="managerRoleId">
                                 @foreach($roles as $role)
-                                    <option value="{{ $role['id'] }}" class="text-dark bg-white">{{ $role['name'] }}</option>
+                                    <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-warning small text-uppercase fw-bold">Chi nhánh</label>
-                            <select class="form-select bg-dark text-white border-secondary" name="branch_id" id="managerBranchId" style="background-color: rgba(0,0,0,0.2) !important;">
-                                <option value="" class="text-dark bg-white">-- Tất cả chi nhánh --</option>
+                            <label class="form-label text-secondary small text-uppercase fw-bold">Chi nhánh</label>
+                            <select class="form-select text-dark border-secondary-subtle" name="branch_id" id="managerBranchId">
+                                <option value="">-- Tất cả chi nhánh --</option>
                                 @foreach($branches as $branch)
-                                    <option value="{{ $branch['id'] }}" class="text-dark bg-white">{{ $branch['name'] }}</option>
+                                    <option value="{{ $branch['id'] }}">{{ $branch['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-check form-switch mt-3 fs-5">
+                    <div class="form-check form-switch mt-3 fs-6">
                         <input class="form-check-input" type="checkbox" role="switch" id="managerStatus" name="is_active" checked>
-                        <label class="form-check-label ms-2 text-white" for="managerStatus" style="font-size: 1rem;">Đang hoạt động</label>
+                        <label class="form-check-label ms-2 text-dark" for="managerStatus" style="font-size: 0.95rem;">Đang hoạt động</label>
                     </div>
                 </div>
-                <div class="modal-footer border-secondary border-opacity-25">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-warning fw-bold"><i class="bi bi-save me-1"></i> Lưu Nhân Sự</button>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn fw-bold text-white" style="background-color: var(--primary-color); border:none;"><i class="bi bi-save me-1"></i> Lưu Nhân Sự</button>
                 </div>
             </form>
         </div>

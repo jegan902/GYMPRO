@@ -4,10 +4,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/news', [HomeController::class, 'news'])->name('news');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/lang/{locale}', [HomeController::class, 'changeLanguage'])->name('lang.switch');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -50,6 +55,28 @@ Route::prefix('admin')->middleware('auth.api')->group(function () {
     Route::patch('/equipments/{id}', [EquipmentController::class, 'update'])->name('admin.equipments.update');
     Route::delete('/equipments/{id}', [EquipmentController::class, 'destroy'])->name('admin.equipments.destroy');
     Route::post('/equipments/{id}/maintenance', [EquipmentController::class, 'maintenance'])->name('admin.equipments.maintenance');
+
+    // Members
+    Route::get('/members', [MemberController::class, 'index'])->name('admin.members');
+    Route::get('/members/create', [MemberController::class, 'create'])->name('admin.members.create');
+    Route::get('/members/{id}', [MemberController::class, 'show'])->name('admin.members.show');
+    Route::get('/members/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
+    Route::post('/members', [MemberController::class, 'store'])->name('admin.members.store');
+    Route::put('/members/{id}', [MemberController::class, 'update'])->name('admin.members.update');
+    Route::delete('/members/{id}', [MemberController::class, 'destroy'])->name('admin.members.destroy');
+    Route::post('/members/{id}/metrics', [MemberController::class, 'recordMetrics'])->name('admin.members.metrics');
+
+    // Packages & Subscriptions
+    Route::get('/packages', [PackageController::class, 'index'])->name('admin.packages');
+    Route::get('/packages/create', [PackageController::class, 'create'])->name('admin.packages.create');
+    Route::get('/packages/{id}', [PackageController::class, 'show'])->name('admin.packages.show');
+    Route::get('/packages/{id}/edit', [PackageController::class, 'edit'])->name('admin.packages.edit');
+    Route::post('/packages', [PackageController::class, 'store'])->name('admin.packages.store');
+    Route::put('/packages/{id}', [PackageController::class, 'update'])->name('admin.packages.update');
+    Route::delete('/packages/{id}', [PackageController::class, 'destroy'])->name('admin.packages.destroy');
+    Route::post('/packages/{id}/toggle', [PackageController::class, 'toggle'])->name('admin.packages.toggle');
+    Route::post('/packages/{packageId}/subscription', [PackageController::class, 'assignSubscription'])->name('admin.packages.subscription.assign');
+    Route::delete('/subscriptions/{subId}', [PackageController::class, 'cancelSubscription'])->name('admin.packages.subscription.cancel');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');

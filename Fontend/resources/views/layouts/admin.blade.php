@@ -18,13 +18,13 @@
         :root {
             --primary-color: #FF5E00;
             --secondary-color: #E65500;
-            --bg-light: #F8F9FA;
+            --bg-light: #F4F6F9;
             --sidebar-bg: #FFFFFF;
             --card-bg: #FFFFFF;
             --border-color: #E2E8F0;
-            --text-main: #1A1D23;
+            --text-main: #1E293B;
             --text-muted: #64748B;
-            --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
         }
 
         body {
@@ -51,8 +51,8 @@
         }
 
         .sidebar-brand {
-            padding: 12px 16px;
-            font-size: 1.1rem;
+            padding: 18px 16px;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text-main);
             text-decoration: none;
@@ -74,30 +74,32 @@
 
         .nav-link {
             color: var(--text-muted);
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.8rem;
             transition: all 0.2s;
             text-decoration: none;
         }
 
         .nav-link i {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
         }
 
         .nav-link:hover {
             color: var(--primary-color);
-            background: #FFF7ED;
+            background: rgba(255, 94, 0, 0.06);
+            border-left: 2px solid var(--primary-color);
         }
 
         .nav-link.active {
             color: var(--primary-color);
-            background: #FFF7ED;
+            background: rgba(255, 94, 0, 0.08);
+            border-left: 2px solid var(--primary-color);
             font-weight: 700;
         }
 
@@ -116,29 +118,33 @@
 
         /* --- TOPBAR --- */
         .topbar {
-            height: 48px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
+            height: 56px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
             z-index: 999;
         }
 
         .branch-selector select {
-            background: #F1F5F9;
-            border: none;
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.8rem;
             font-weight: 600;
             outline: none;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        .branch-selector select:focus {
+            border-color: var(--primary-color);
         }
 
         .topbar-actions {
@@ -151,57 +157,62 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 1.1rem;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
             transition: all 0.2s;
+            border: 1px solid var(--border-color);
         }
 
         .btn-icon:hover {
-            background: #F1F5F9;
+            background: #F8FAFC;
             color: var(--text-main);
+            border-color: #CBD5E1;
         }
 
         .notification-badge {
             position: absolute;
             top: 6px;
             right: 8px;
-            background: #EF4444;
-            width: 10px;
-            height: 10px;
+            background: var(--primary-color);
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            border: 2px solid white;
+            box-shadow: 0 0 6px rgba(255, 94, 0, 0.4);
         }
 
         .user-profile {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 4px 8px;
-            border-radius: 10px;
-            transition: background 0.2s;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: #F8FAFC;
+            transition: all 0.2s;
             cursor: pointer;
         }
 
         .user-profile:hover {
             background: #F1F5F9;
+            border-color: #CBD5E1;
         }
 
         .user-avatar {
             width: 28px;
             height: 28px;
-            border-radius: 50%;
+            border-radius: 4px;
             object-fit: cover;
         }
 
         /* --- CONTENT AREA --- */
         .content-area {
-            padding: 10px;
+            padding: 24px;
             flex-grow: 1;
         }
 
@@ -215,13 +226,25 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
         .dropdown-menu {
+            background-color: #FFFFFF !important;
             z-index: 2000 !important;
             border: 1px solid var(--border-color) !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+            border-radius: 4px !important;
+        }
+        .dropdown-item {
+            color: var(--text-main) !important;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(255, 94, 0, 0.08) !important;
+            color: var(--primary-color) !important;
         }
 
         .dropdown-item:active {
             background-color: var(--primary-color) !important;
+            color: white !important;
         }
     </style>
     @stack('styles')
@@ -242,7 +265,7 @@
                 <i class="bi bi-grid-1x2"></i> Dashboard
             </a>
 
-            <!-- SUPER ADMIN ONLY -->
+            <!-- SUPER ADMIN ONLY (System Level) -->
             @if(session('user_role') == 'Super Admin')
                 <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
                     style="font-size: 0.7rem; letter-spacing: 1px;">
@@ -256,22 +279,27 @@
                     class="nav-link {{ request()->routeIs('admin.managers') ? 'active' : '' }}">
                     <i class="bi bi-person-badge"></i> Quản lý
                 </a>
+            @endif
+
+            <!-- OPERATIONAL ROLES (Super Admin, Branch Admin, Staff/PT) -->
+            @if(in_array(session('user_role'), ['Super Admin', 'Branch Admin', 'Staff/PT']))
+                <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
+                    style="font-size: 0.7rem; letter-spacing: 1px;">
+                    Vận Hành Phòng Tập
+                </div>
                 <a href="{{ route('admin.equipments') }}"
                     class="nav-link {{ request()->routeIs('admin.equipments*') ? 'active' : '' }}">
                     <i class="bi bi-bicycle"></i> Thiết bị
                 </a>
+                <a href="{{ route('admin.members') }}"
+                    class="nav-link {{ request()->routeIs('admin.members*') ? 'active' : '' }}">
+                    <i class="bi bi-people"></i> Hội viên
+                </a>
+                <a href="{{ route('admin.packages') }}"
+                    class="nav-link {{ request()->routeIs('admin.packages*') ? 'active' : '' }}">
+                    <i class="bi bi-box-seam"></i> Gói Tập & Doanh Thu
+                </a>
             @endif
-
-            {{-- 
-            <div class="small text-uppercase text-dim fw-bold mb-2 ms-2 mt-4"
-                style="font-size: 0.7rem; letter-spacing: 1px;">Management</div>
-            <a href="#" class="nav-link" onclick="alert('Đang khóa!')">
-                <i class="bi bi-wallet2"></i> Tài Chính
-            </a>
-            <a href="#" class="nav-link" onclick="alert('Cài Đặt...')">
-                <i class="bi bi-gear"></i> Cài Đặt
-            </a>
-            --}}
         </div>
     </aside>
 
