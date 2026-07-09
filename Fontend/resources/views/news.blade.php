@@ -427,16 +427,24 @@
         <div class="container">
             <div class="news-grid">
                 @foreach($articles as $article)
+                    @php
+                        $artId = data_get($article, 'id') ?? 1;
+                        $artTitle = data_get($article, 'title');
+                        $artSummary = data_get($article, 'summary');
+                        $artImage = data_get($article, 'image');
+                        $artCategory = data_get($article, 'category');
+                        $artDate = data_get($article, 'date');
+                    @endphp
                     <div class="article-card">
                         <div class="article-image-wrapper">
-                            <span class="article-category">{{ $article['category'] }}</span>
-                            <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="article-image">
+                            <span class="article-category">{{ $artCategory }}</span>
+                            <img src="{{ $artImage }}" alt="{{ $artTitle }}" class="article-image">
                         </div>
                         <div class="article-body">
-                            <span class="article-date"><i class="bi bi-calendar3"></i> {{ $article['date'] }}</span>
-                            <a href="#" class="article-title-text">{{ $article['title'] }}</a>
-                            <p class="article-summary">{{ $article['summary'] }}</p>
-                            <a href="#" class="article-link">Đọc chi tiết <i class="bi bi-arrow-right"></i></a>
+                            <span class="article-date"><i class="bi bi-calendar3"></i> {{ $artDate }}</span>
+                            <a href="javascript:void(0)" class="article-title-text" onclick="showArticleDetails('{{ $artId }}', '{{ addslashes($artTitle) }}', '{{ addslashes($artSummary) }}', '{{ $artImage }}', '{{ $artCategory }}', '{{ $artDate }}')">{{ $artTitle }}</a>
+                            <p class="article-summary">{{ $artSummary }}</p>
+                            <a href="javascript:void(0)" class="article-link" onclick="showArticleDetails('{{ $artId }}', '{{ addslashes($artTitle) }}', '{{ addslashes($artSummary) }}', '{{ $artImage }}', '{{ $artCategory }}', '{{ $artDate }}')"><?php echo __('Đọc chi tiết'); ?> <i class="bi bi-arrow-right"></i></a>
                         </div>
                     </div>
                 @endforeach
@@ -444,15 +452,47 @@
 
             <!-- Newsletter Subscription -->
             <div class="newsletter-box">
-                <h3 class="newsletter-title">Nhận Ưu Đãi & Tin Tức Mới</h3>
-                <p class="text-muted mb-0">Đăng ký email để nhận lịch trình giải đấu, mẹo ăn uống giảm mỡ và các voucher gói tập sớm nhất.</p>
+                <h3 class="newsletter-title">{{ __('Nhận Ưu Đãi & Tin Tức Mới') }}</h3>
+                <p class="text-muted mb-0">{{ __('Đăng ký email để nhận lịch trình giải đấu, mẹo ăn uống giảm mỡ và các voucher gói tập sớm nhất.') }}</p>
                 <div class="newsletter-input-group">
-                    <input type="email" class="newsletter-input" placeholder="Nhập địa chỉ email của bạn...">
-                    <button class="newsletter-btn">Đăng ký</button>
+                    <input type="email" class="newsletter-input" placeholder="{{ __('Nhập địa chỉ email của bạn...') }}">
+                    <button class="newsletter-btn">{{ __('Đăng ký') }}</button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Article Detail Modal -->
+    <div class="modal fade" id="articleModal" tabindex="-1" aria-labelledby="articleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: var(--dark-luxury-card); border: 1px solid var(--dark-border); border-radius: 12px; overflow: hidden; color: var(--text-light);">
+                <div class="modal-header border-0 pb-0 position-relative" style="z-index: 10;">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 bg-dark p-2 rounded-circle" data-bs-dismiss="modal" aria-label="Close" style="opacity: 0.8; filter: invert(1);"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div style="height: 350px; position: relative;">
+                        <img id="modalImage" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); padding: 30px; padding-top: 80px;">
+                            <span id="modalCategory" class="badge bg-danger mb-2" style="background: var(--red-gradient) !important; letter-spacing: 1px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; padding: 6px 12px; border-radius: 4px;"></span>
+                            <h2 id="modalTitle" class="text-white fw-bold uppercase m-0" style="font-size: 1.8rem; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></h2>
+                        </div>
+                    </div>
+                    <div class="p-4 p-md-5">
+                        <div class="d-flex align-items-center gap-3 text-muted small mb-4 font-monospace">
+                            <span><i class="bi bi-calendar3 me-1"></i> <span id="modalDate"></span></span>
+                            <span>•</span>
+                            <span><i class="bi bi-person-fill me-1"></i> Admin GymPro</span>
+                        </div>
+                        <div id="modalContent" class="fs-5 lh-lg text-muted" style="text-align: justify; font-weight: 400;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-light p-3 d-flex justify-content-end bg-light bg-opacity-50">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; border-color: var(--dark-border); color: var(--text-light);"><?php echo __('Đóng'); ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -463,20 +503,20 @@
                         <i class="bi bi-lightning-charge-fill" style="color: var(--primary-red);"></i> GYM<span>PRO</span>
                     </div>
                     <p class="text-muted pe-lg-4">
-                        Hệ sinh thái thể hình công nghệ cao cấp. Đồng bộ dữ liệu quản trị từ CMS các chi nhánh thời gian thực.
+                        <?php echo __('Hệ sinh thái thể hình công nghệ cao cấp. Đồng bộ dữ liệu quản trị từ CMS các chi nhánh thời gian thực.'); ?>
                     </p>
                 </div>
                 <div class="col-lg-4">
-                    <h5 class="fw-bold text-white mb-3" style="font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;">Điều Hướng</h5>
+                    <h5 class="fw-bold text-white mb-3" style="font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;"><?php echo __('Điều Hướng'); ?></h5>
                     <ul class="footer-links">
-                        <li><a href="{{ route('home') }}">Trang Chủ</a></li>
-                        <li><a href="{{ route('about') }}">Giới Thiệu</a></li>
-                        <li><a href="{{ route('news') }}">Tin Tức</a></li>
-                        <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
+                        <li><a href="{{ route('home') }}"><?php echo __('Trang Chủ'); ?></a></li>
+                        <li><a href="{{ route('about') }}"><?php echo __('Giới Thiệu'); ?></a></li>
+                        <li><a href="{{ route('news') }}"><?php echo __('Tin Tức'); ?></a></li>
+                        <li><a href="{{ route('contact') }}"><?php echo __('Liên Hệ'); ?></a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">
-                    <h5 class="fw-bold text-white mb-3" style="font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;">Hỗ Trợ</h5>
+                    <h5 class="fw-bold text-white mb-3" style="font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;"><?php echo __('Hỗ Trợ'); ?></h5>
                     <p class="mb-2 text-muted"><i class="bi bi-telephone-fill me-2 text-white"></i> Hotline: 1900 6868</p>
                     <p class="mb-2 text-muted"><i class="bi bi-envelope-fill me-2 text-white"></i> Email: support@gympro.com</p>
                     <p class="mb-0 text-muted"><i class="bi bi-geo-alt-fill me-2 text-white"></i> HQ: Quận 1, TP. Hồ Chí Minh</p>
@@ -500,6 +540,28 @@
                 nav.classList.remove('scrolled');
             }
         });
+
+        // Mock detail database mapping
+        const articleDetails = {
+            1: "<?php echo __('GymPro Quận 7 tự hào là một trong những trung tâm thể hình cao cấp nhất khu vực phía Nam Sài Gòn. Với quy mô diện tích lên đến hơn 2.000m², cơ sở mới trang bị toàn bộ hệ thống máy tập hiện đại từ thương hiệu Technogym (Italy) đạt tiêu chuẩn thi đấu Olympic. Không gian tập luyện tại đây được thiết kế theo phong cách Luxury Industrial tinh tế, sang trọng, mang lại cảm hứng bứt phá giới hạn cho từng hội viên. Ngoài ra, chi nhánh còn sở hữu khu vực locker 5 sao, phòng tắm xông hơi thảo dược miễn phí và đội ngũ huấn luyện viên (PT) giàu kinh nghiệm sẵn sàng đồng hành 1-1 cùng học viên.'); ?>",
+            2: "<?php echo __('Chế độ dinh dưỡng chiếm tới 70% thành công trong hành trình cải thiện vóc dáng. Để bắt đầu một cách khoa học, người mới cần hiểu rõ về các nhóm chất dinh dưỡng vĩ lượng (Macro) bao gồm Protein, Carb và Fat. Sử dụng chỉ số chiều cao và cân nặng để tính toán TDEE (Tổng lượng năng lượng tiêu thụ hàng ngày) là bước đầu tiên để xác định lượng calo cần nạp vào. GymPro khuyên bạn nên tập trung vào việc bổ sung nguồn đạm sạch (ức gà, bò, cá), carb hấp thụ chậm (yến mạch, khoai lang) và chất béo tốt (hạnh nhân, quả bơ) kết hợp uống đủ 2-3 lít nước mỗi ngày để tối ưu trao đổi chất.'); ?>",
+            3: "<?php echo __('Các bài tập phối hợp nhiều nhóm cơ cùng lúc (Compound) như Squat, Bench Press và Deadlift là chìa khóa vàng để kích thích cơ bắp phát triển toàn diện và gia tăng sức mạnh cốt lõi. Khi thực hiện các bài tập này, kỹ thuật chuẩn xác là yếu tố quan trọng nhất để tránh chấn thương cột sống và khớp. Bạn nên bắt đầu với mức tạ nhẹ để làm quen với biên độ chuyển động (ROM), tập trung gồng cơ trọng tâm (bracing core) và luôn có sự giám sát của huấn luyện viên hỗ trợ khi nâng tạ nặng.'); ?>",
+            4: "<?php echo __('Giải đấu GymPro Powerlifting Championship 2026 chính thức khởi tranh tại chi nhánh Quận 1 vào ngày 28/05/2026. Đây là giải đấu thường niên quy tụ hơn 200 lực sĩ bán chuyên và chuyên nghiệp trên toàn quốc tham gia tranh tài ở 3 nội dung: Squat, Bench Press và Deadlift. Tổng giá trị giải thưởng lên đến 100 triệu đồng cùng cơ hội nhận gói tập VIP trọn đời tại hệ thống GymPro. Khán giả và hội viên có thể đến cổ vũ trực tiếp hoặc theo dõi livestream trên fanpage chính thức của chúng tôi.'); ?>"
+        };
+
+        // Show details in Modal
+        function showArticleDetails(id, title, summary, image, category, date) {
+            const content = articleDetails[id] || summary;
+            
+            document.getElementById('modalImage').src = image;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalCategory').innerText = category;
+            document.getElementById('modalDate').innerText = date;
+            document.getElementById('modalContent').innerText = content;
+
+            const myModal = new bootstrap.Modal(document.getElementById('articleModal'));
+            myModal.show();
+        }
     </script>
 </body>
 </html>

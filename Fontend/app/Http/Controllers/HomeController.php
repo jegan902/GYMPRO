@@ -19,6 +19,33 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $articles = [
+            [
+                'id' => 1,
+                'title' => 'Khai Trương Chi Nhánh GymPro Premium Quận 7',
+                'summary' => 'GymPro chính thức khai trương chi nhánh mới tại Quận 7 với trang thiết bị Technogym chuẩn Olympic và ưu đãi 30% gói tập.',
+                'image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800',
+                'category' => 'Sự kiện',
+                'date' => '12/06/2026',
+            ],
+            [
+                'id' => 2,
+                'title' => 'Chế Độ Dinh Dưỡng Kết Hảo Cho Người Mới',
+                'summary' => 'Làm thế nào để xây dựng chế độ ăn uống giảm mỡ tăng cơ chính xác nhất phù hợp với thể trạng cá nhân.',
+                'image' => 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=800',
+                'category' => 'Dinh dưỡng',
+                'date' => '08/06/2026',
+            ],
+            [
+                'id' => 3,
+                'title' => '5 Bài Tập Compound Tốt Nhất Để Phát Triển Sức Mạnh Toàn Diện',
+                'summary' => 'Hướng dẫn từ đội ngũ Huấn luyện viên cá nhân (PT) của GymPro về Squat, Bench Press, Deadlift và cách tránh chấn thương.',
+                'image' => 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800',
+                'category' => 'Tập luyện',
+                'date' => '03/06/2026',
+            ]
+        ];
+
         try {
             // Lấy danh sách chi nhánh
             $branchRes = $this->api->get('/v1/Branches');
@@ -35,13 +62,14 @@ class HomeController extends Controller
             $packages = $packageRes->successful() ? $packageRes->json() : [];
             \Log::info('Home Packages Raw: ' . json_encode($packages));
 
-            return view('home', compact('branches', 'staff', 'packages'));
+            return view('home', compact('branches', 'staff', 'packages', 'articles'));
         } catch (\Exception $e) {
             \Log::error('Home Page Data Fetch Error: ' . $e->getMessage());
             return view('home', [
                 'branches' => [],
                 'staff' => [],
-                'packages' => []
+                'packages' => [],
+                'articles' => $articles
             ]);
         }
     }

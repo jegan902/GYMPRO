@@ -177,7 +177,8 @@
         }
         .hero-title span {
             background: var(--red-gradient);
-            /* -webkit-background-clip: text; */
+            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .hero-lead {
@@ -930,22 +931,22 @@
                         <i class="bi bi-lightning-fill"></i> Club The Ultimate Training
                     </div>
                     <h1 class="hero-title">
-                        Kiến Tạo<br>Vóc Dáng <span>Vượt Trội</span>
+                        <?php echo __('Kiến Tạo'); ?><br><?php echo __('Vóc Dáng'); ?> <span><?php echo __('Vượt Trội'); ?></span>
                     </h1>
                     <p class="hero-lead">
-                        Hệ thống GymPro liên kết trực tiếp các chi nhánh, đồng bộ quản lý đội ngũ PT huấn luyện và tích hợp AI phân tích chỉ số cơ thể thời gian thực giúp bạn đạt hiệu quả tối ưu nhất.
+                        <?php echo __('Hệ thống GymPro cung cấp không gian tập luyện hiện đại, máy móc đạt chuẩn Olympic cùng đội ngũ PT chuyên nghiệp đồng hành giúp bạn đạt hiệu quả tối ưu nhất.'); ?>
                     </p>
                     <div class="d-flex flex-wrap gap-3">
                         @if(session('api_token'))
                             <a href="{{ route('admin.dashboard') }}" class="btn-red-glow">
-                                TRUY CẬP DASHBOARD <i class="bi bi-chevron-right"></i>
+                                <?php echo __('TRUY CẬP DASHBOARD'); ?> <i class="bi bi-chevron-right"></i>
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="btn-red-glow">
-                                BẮT ĐẦU NGAY <i class="bi bi-lightning-fill"></i>
+                                <?php echo __('BẮT ĐẦU NGAY'); ?> <i class="bi bi-lightning-fill"></i>
                             </a>
                         @endif
-                        <a href="#branches" class="btn-outline-minimal">Tìm chi nhánh gần nhất</a>
+                        <a href="#pricing" class="btn-outline-minimal"><?php echo __('Khám phá gói tập'); ?></a>
                     </div>
                 </div>
                 <div>
@@ -955,7 +956,7 @@
                         <div class="hero-poster-overlay">
                             <span class="role-badge badge-mgr mb-2 w-auto align-self-start" style="font-size: 0.6rem;">HIGH INTENSITY</span>
                             <h4 class="fw-bold text-white mb-1 uppercase">LIMITLESS POTENTIAL</h4>
-                            <p class="text-muted small mb-0">Hệ thống phân quyền chi tiết cho Quản lý chi nhánh (Branch Admin) và Nhân viên (Staff/PT).</p>
+                            <p class="text-muted small mb-0"><?php echo __('Hệ thống phòng tập cao cấp chuẩn Olympic và đội ngũ huấn luyện viên (PT) chuyên nghiệp hỗ trợ bạn.'); ?></p>
                         </div>
                     </div>
                 </div>
@@ -978,118 +979,118 @@
                 
                 <!-- Right: Editorial Content -->
                 <div>
-                    <span class="intro-tagline">Về chúng tôi</span>
-                    <h2 class="intro-title">Chào mừng bạn đến với GymPro</h2>
+                    <span class="intro-tagline"><?php echo __('Về chúng tôi'); ?></span>
+                    <h2 class="intro-title"><?php echo __('Chào mừng bạn đến với GymPro'); ?></h2>
                     <p class="intro-desc">
-                        GymPro không chỉ đơn thuần là một trung tâm thể hình. Chúng tôi là một <strong>hệ sinh thái tập luyện thông minh và toàn diện</strong>. Với định hướng mang lại trải nghiệm cao cấp nhưng vô cùng dễ tiếp cận, GymPro kết hợp hài hòa giữa không gian tập luyện hiện đại, đội ngũ huấn luyện viên (PT) chuyên nghiệp và hệ thống phân tích chỉ số sức khỏe AI thời gian thực. Bất kể bạn là người mới bắt đầu hay vận động viên chuyên nghiệp, chúng tôi cam kết hỗ trợ bạn trên từng bước hành trình chinh phục mục tiêu sức khỏe.
+                        <?php echo __('GymPro không chỉ đơn thuần là một trung tâm thể hình. Chúng tôi là một hệ sinh thái tập luyện hiện đại và toàn diện. Với định hướng mang lại trải nghiệm cao cấp nhưng vô cùng dễ tiếp cận, GymPro kết hợp hài hòa giữa không gian tập luyện hiện đại, trang thiết bị đạt chuẩn Olympic và đội ngũ huấn luyện viên (PT) chuyên nghiệp tận tâm.'); ?>
                     </p>
                     
                     <!-- Approachable Trust Metrics -->
                     <div class="intro-stats-grid">
                         <div class="intro-stat-card">
                             <div class="intro-stat-number">15+</div>
-                            <div class="intro-stat-label">Chi nhánh</div>
+                            <div class="intro-stat-label"><?php echo __('Chi nhánh'); ?></div>
                         </div>
                         <div class="intro-stat-card">
                             <div class="intro-stat-number">50K+</div>
-                            <div class="intro-stat-label">Hội viên</div>
+                            <div class="intro-stat-label"><?php echo __('Hội viên'); ?></div>
                         </div>
                         <div class="intro-stat-card">
                             <div class="intro-stat-number">98%</div>
-                            <div class="intro-stat-label">Hài lòng</div>
+                            <div class="intro-stat-label"><?php echo __('Hài lòng'); ?></div>
                         </div>
                     </div>
 
                     <!-- Highlight Features -->
                     <ul class="intro-features-list">
-                        <li><i class="bi bi-patch-check-fill"></i> Đội ngũ Huấn luyện viên chuyên môn cao, hỗ trợ tận tâm.</li>
-                        <li><i class="bi bi-patch-check-fill"></i> Đo lường & đề xuất chế độ dinh dưỡng cá nhân hóa bằng AI.</li>
-                        <li><i class="bi bi-patch-check-fill"></i> Trang thiết bị nhập khẩu 100% đạt chuẩn Olympic.</li>
+                        <li><i class="bi bi-patch-check-fill"></i> <?php echo __('Đội ngũ Huấn luyện viên chuyên môn cao, hỗ trợ tận tâm.'); ?></li>
+                        <li><i class="bi bi-patch-check-fill"></i> <?php echo __('Chương trình tập luyện khoa học thiết kế riêng cho từng hội viên.'); ?></li>
+                        <li><i class="bi bi-patch-check-fill"></i> <?php echo __('Trang thiết bị nhập khẩu 100% đạt chuẩn Olympic.'); ?></li>
                     </ul>
 
-                    <a href="{{ route('about') }}" class="btn-red-glow">Xem Chi Tiết Giới Thiệu <i class="bi bi-arrow-right-short ms-1"></i></a>
-                    <a href="#branches" class="btn-outline-minimal ms-2">Khám phá chi nhánh</a>
+                    <a href="{{ route('about') }}" class="btn-red-glow"><?php echo __('Xem Chi Tiết Giới Thiệu'); ?> <i class="bi bi-arrow-right-short ms-1"></i></a>
+                    <a href="#pricing" class="btn-outline-minimal ms-2"><?php echo __('Khám phá gói tập'); ?></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Smart Features Section -->
-    <section id="features" class="py-5">
+    <!-- Member Testimonials Section -->
+    <section id="testimonials" class="py-5 my-5">
         <div class="container">
             <div class="section-header text-center">
-                <span class="section-tag">Công nghệ tối tân</span>
-                <h2 class="section-title-text text-dark">Smart Fitness Ecosystem</h2>
-                <p class="text-muted mx-auto mt-3" style="max-width: 600px;">Được thiết kế để tối ưu hóa quy trình vận hành và nâng cao trải nghiệm tập luyện của hội viên.</p>
+                <span class="section-tag"><?php echo __('Hành Trình Thay Đổi'); ?></span>
+                <h2 class="section-title-text text-dark"><?php echo __('Đánh Giá Từ Hội Viên'); ?></h2>
+                <p class="text-muted mx-auto mt-3" style="max-width: 600px;">
+                    <?php echo __('Nhận xét chân thực từ các học viên, hội viên đã trực tiếp trải nghiệm môi trường tập luyện cao cấp tại hệ thống GymPro.'); ?>
+                </p>
             </div>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="premium-card h-100">
-                        <div class="feature-num">01</div>
-                        <h4 class="fw-bold mb-3 text-dark">Tính toán Chỉ số Tự động</h4>
-                        <p class="text-muted mb-0">Hệ thống tự động phân tích chỉ số BMI, BMR, TDEE ngay khi ghi nhận số đo của hội viên để đề xuất chế độ ăn uống.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="premium-card h-100">
-                        <div class="feature-num" style="--primary-red: #2E90FF;">02</div>
-                        <h4 class="fw-bold mb-3 text-dark">Phân Quyền Vai Trò CMS</h4>
-                        <p class="text-muted mb-0">Hệ thống phân quyền chi tiết cho Quản lý chi nhánh (Branch Admin) và Nhân viên (Staff/PT) để kiểm soát dữ liệu chặt chẽ.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="premium-card h-100">
-                        <div class="feature-num" style="--primary-red: #10B981;">03</div>
-                        <h4 class="fw-bold mb-3 text-dark">Báo cáo & Cảnh báo Sức khỏe</h4>
-                        <p class="text-muted mb-0">Kết nối trực tiếp IoT và AI để liên tục cập nhật và cảnh báo các chỉ số bất thường khi tập luyện.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AI BMI / BMR Calculator Tool (WOW Preview Section) -->
-    <section id="bmr-tool" class="py-5 my-5">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-5">
-                    <span class="section-tag">AI health tool</span>
-                    <h2 class="section-title-text text-dark mb-4">Ước tính thể trạng thời gian thực</h2>
-                    <p class="text-muted mb-4">
-                        Nhập nhanh số đo chiều cao và cân nặng để xem chỉ số BMI (Body Mass Index) và BMR (Tỷ lệ trao đổi chất cơ bản) của bạn dựa trên thuật toán AI GymPro.
-                    </p>
-                    <div class="p-3 bg-warning bg-opacity-10 border border-warning-subtle rounded mb-4">
-                        <div class="small text-muted"><i class="bi bi-info-circle-fill text-warning me-2"></i><strong>Lưu ý:</strong> Để lưu trữ lịch sử, theo dõi biểu đồ tăng trưởng sức khỏe định kỳ và nhận thực đơn đề xuất cá nhân hóa, vui lòng đăng nhập vào tài khoản hội viên.</div>
-                    </div>
-                    <a href="{{ route('login') }}" class="btn-outline-minimal">ĐĂNG NHẬP LƯU CHỈ SỐ <i class="bi bi-arrow-right-short ms-2"></i></a>
-                </div>
-                <div class="col-lg-7">
-                    <div class="analytics-preview-widget">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="mb-4">
-                                    <label class="calc-label">Chiều cao (cm)</label>
-                                    <input type="number" id="inputHeight" class="calc-input" placeholder="Ví dụ: 175" value="170">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="calc-label">Cân nặng (kg)</label>
-                                    <input type="number" id="inputWeight" class="calc-input" placeholder="Ví dụ: 70" value="65">
-                                </div>
-                                <button onclick="calculateAIStats()" class="btn-red-glow w-100 py-3 d-block text-center justify-content-center">Phân tích thể trạng</button>
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
                             </div>
-                            <div class="col-md-6 text-center d-flex flex-column justify-content-center">
-                                <div class="circular-progress-box mb-3">
-                                    <svg>
-                                        <circle class="circular-bg" cx="90" cy="90" r="70"></circle>
-                                        <circle class="circular-bar" id="bmiCircle" cx="90" cy="90" r="70"></circle>
-                                    </svg>
-                                    <div class="circular-value">
-                                        <div class="h3 fw-bold text-dark mb-0" id="bmiVal">22.5</div>
-                                        <div class="small text-muted font-monospace" style="font-size: 0.65rem;">BMI</div>
-                                    </div>
-                                </div>
-                                <div class="fw-bold text-dark" id="statusVal">Thể trạng: Bình Thường</div>
-                                <div class="text-muted small mt-2" id="bmrVal">BMR dự tính: 1,485 kcal/ngày</div>
+                            <p class="testimonial-quote">
+                                "<?php echo __('Không gian tập vô cùng thoáng mát, máy móc nhập khẩu xịn xò. Đội ngũ PT ở đây rất thân thiện và nhiệt tình, hướng dẫn mình từng buổi tập động tác chuẩn xác.'); ?>"
+                            </p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150" alt="Member Avatar" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">Minh Thư</div>
+                                <div class="testimonial-pkg"><?php echo __('Gói VIP 6 Tháng'); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="testimonial-quote">
+                                "<?php echo __('Mình đã giảm được 8kg chỉ sau 3 tháng tập luyện theo giáo án của PT tại GymPro. Dịch vụ chăm sóc khách hàng tốt, phòng tắm và locker cực kỳ sạch sẽ.'); ?>"
+                            </p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=150" alt="Member Avatar" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">Hoàng Long</div>
+                                <div class="testimonial-pkg"><?php echo __('Gói Gold 3 Tháng'); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="testimonial-quote">
+                                "<?php echo __('Rất hài lòng với chất lượng dịch vụ của GymPro. Các gói tập linh hoạt, không phát sinh chi phí ẩn. Hợp đồng rõ ràng và PT hỗ trợ đắc lực.'); ?>"
+                            </p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150" alt="Member Avatar" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">Khánh Linh</div>
+                                <div class="testimonial-pkg"><?php echo __('Gói Diamond 12 Tháng'); ?></div>
                             </div>
                         </div>
                     </div>
@@ -1098,143 +1099,36 @@
         </div>
     </section>
 
-    <!-- Branch CMS Portal Dynamic Section -->
-    <section id="branches" class="py-5">
+    <!-- Latest News Section -->
+    <section id="news" class="py-5 my-5">
         <div class="container">
             <div class="section-header text-center">
-                <span class="section-tag">Đồng bộ dữ liệu CMS</span>
-                <h2 class="section-title-text text-dark">Khám Phá Chi Nhánh & Đội Ngũ Nhân Sự</h2>
-                <p class="text-muted mx-auto mt-3" style="max-width: 600px;">Dữ liệu nhân sự được đồng bộ thời gian thực từ hệ thống CMS của các Quản lý chi nhánh & Nhân viên.</p>
+                <span class="section-tag"><?php echo __('Cập nhật mới nhất'); ?></span>
+                <h2 class="section-title-text text-dark"><?php echo __('Tin Tức & Sự Kiện Nổi Bật'); ?></h2>
+                <p class="text-muted mx-auto mt-3" style="max-width: 600px;">
+                    <?php echo __('Theo dõi các tin tức thể hình, dinh dưỡng chia sẻ từ các chuyên gia hàng đầu và thông tin sự kiện mới nhất tại GymPro.'); ?>
+                </p>
             </div>
-
-            @if(count($branches) === 0)
-                <div class="text-center py-5">
-                    <i class="bi bi-geo text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
-                    <p class="text-muted mt-3">Đang cập nhật danh sách chi nhánh từ CMS...</p>
-                </div>
-            @else
-                <!-- Branch Selector Tab Buttons -->
-                <div class="branch-tabs">
-                    @foreach($branches ?? [] as $index => $branch)
-                        @php
-                            $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
-                            $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
-                        @endphp
-                        <button class="branch-tab-btn {{ $index === 0 ? 'active' : '' }}" onclick="switchBranch(event, 'branch-tab-{{ $bId }}')">
-                            <i class="bi bi-geo-alt-fill me-2"></i> {{ $bName }}
-                        </button>
-                    @endforeach
-                </div>
-
-                <!-- Branch Contents -->
-                @foreach($branches ?? [] as $index => $branch)
-                    @php
-                        $bId = data_get($branch, 'id') ?? data_get($branch, 'Id');
-                        $bName = data_get($branch, 'name') ?? data_get($branch, 'Name');
-                        $bAddress = data_get($branch, 'address') ?? data_get($branch, 'Address');
-                        $bPhone = data_get($branch, 'phone') ?? data_get($branch, 'Phone');
-                        $bMembersCount = data_get($branch, 'members_count') ?? data_get($branch, 'MembersCount') ?? 0;
-                        $bIsActive = data_get($branch, 'is_active') ?? data_get($branch, 'IsActive');
-                        $bManager = data_get($branch, 'manager') ?? data_get($branch, 'Manager');
-                        $bManagerAvatar = data_get($branch, 'manager_avatar') ?? data_get($branch, 'ManagerAvatar');
-                    @endphp
-                    <div class="branch-content-panel {{ $index === 0 ? '' : 'd-none' }}" id="branch-tab-{{ $bId }}">
-                        <div class="branch-portal-grid">
-                            <!-- Left: Branch details -->
-                            <div class="premium-card d-flex flex-column justify-content-between">
-                                <div>
-                                    <h3 class="fw-bold text-dark mb-4"><i class="bi bi-building-fill text-danger me-2"></i>{{ $bName }}</h3>
-                                    
-                                    <div class="branch-meta-item">
-                                        <div class="branch-meta-icon"><i class="bi bi-map"></i></div>
-                                        <div>
-                                            <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Địa chỉ</div>
-                                            <div class="text-dark fw-bold">{{ $bAddress }}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="branch-meta-item">
-                                        <div class="branch-meta-icon"><i class="bi bi-telephone"></i></div>
-                                        <div>
-                                            <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Hotline chi nhánh</div>
-                                            <div class="text-dark fw-bold">{{ $bPhone ?? 'Chưa cập nhật' }}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="branch-meta-item">
-                                        <div class="branch-meta-icon"><i class="bi bi-people"></i></div>
-                                        <div>
-                                            <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Hội viên hoạt động</div>
-                                            <div class="text-dark fw-bold">{{ $bMembersCount }} hội viên</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-4 pt-3 border-top border-secondary d-flex align-items-center justify-content-between">
-                                    <span class="small text-muted">Trạng thái CMS</span>
-                                    @if($bIsActive)
-                                        <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-check-circle-fill me-1"></i> Đang mở cửa</span>
-                                    @else
-                                        <span class="badge bg-secondary px-3 py-2 rounded-pill"><i class="bi bi-dash-circle-fill me-1"></i> Đang bảo trì</span>
-                                    @endif
-                                </div>
+            <div class="row g-4">
+                @foreach($articles ?? [] as $article)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="news-card">
+                            <div class="news-img-box">
+                                <span class="news-cat-badge">{{ $article['category'] }}</span>
+                                <img src="{{ $article['image'] }}" alt="{{ $article['title'] }}" class="news-img">
                             </div>
-
-                            <!-- Right: Branch Personnel from CMS Roles -->
-                            <div class="premium-card">
-                                <!-- Manager of Branch (Branch Admin Role) -->
-                                <div class="staff-section-title">
-                                    Quản lý chi nhánh (Branch Admin)
-                                </div>
-                                <div class="manager-card mb-5">
-                                    <img src="{{ $bManagerAvatar ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }}" 
-                                         alt="Manager Avatar" class="staff-avatar">
-                                    <div>
-                                        <h4 class="fw-bold text-dark mb-1">{{ $bManager }}</h4>
-                                        <span class="role-badge badge-mgr mb-2">Branch Admin / Manager</span>
-                                        <div class="text-muted small"><i class="bi bi-envelope me-2"></i>Dữ liệu quản trị được chỉ định chính thức từ CMS.</div>
-                                    </div>
-                                </div>
-
-                                <!-- Staff/PT list belonging to this branch -->
-                                <div class="staff-section-title">
-                                    Đội ngũ huấn luyện viên (Staff / PT)
-                                </div>
-                                
-                                @php
-                                    $branchStaff = collect($staff)->filter(function($u) use ($bId) {
-                                        return data_get($u, 'branch_id') == $bId && in_array(data_get($u, 'role_name'), ['Staff/PT', 'PT', 'Staff']);
-                                    });
-                                @endphp
-
-                                @if($branchStaff->isEmpty())
-                                    <div class="text-center py-5 bg-light bg-opacity-50 rounded border border-secondary border-dashed">
-                                        <i class="bi bi-person-x text-muted fs-2"></i>
-                                        <p class="text-muted small mt-2 mb-0">Chưa có PT nào được phân bổ cho chi nhánh này trên CMS.</p>
-                                    </div>
-                                @else
-                                    <div class="staff-grid">
-                                        @foreach($branchStaff as $pt)
-                                            @php
-                                                $ptAvatar = data_get($pt, 'avatar');
-                                                $ptFullName = data_get($pt, 'full_name');
-                                                $ptEmail = data_get($pt, 'email');
-                                            @endphp
-                                            <div class="staff-card">
-                                                <img src="{{ $ptAvatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200' }}" 
-                                                     alt="PT Avatar" class="staff-avatar">
-                                                <h5 class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">{{ $ptFullName }}</h5>
-                                                <span class="role-badge badge-pt mb-2">Personal Trainer</span>
-                                                <div class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-envelope-fill me-1"></i>{{ $ptEmail }}</div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
+                            <div class="news-body">
+                                <div class="news-date"><i class="bi bi-calendar3 me-2"></i>{{ $article['date'] }}</div>
+                                <h3 class="news-title">
+                                    <a href="<?php echo route('news'); ?>">{{ $article['title'] }}</a>
+                                </h3>
+                                <p class="news-excerpt">{{ $article['summary'] }}</p>
+                                <a href="<?php echo route('news'); ?>" class="news-link"><?php echo __('Xem chi tiết'); ?> <i class="bi bi-arrow-right-short"></i></a>
                             </div>
                         </div>
                     </div>
                 @endforeach
-            @endif
+            </div>
         </div>
     </section>
 
@@ -1349,68 +1243,6 @@
                 navbar.classList.remove('scrolled');
             }
         });
-
-        // Switch branch tabs
-        function switchBranch(evt, branchId) {
-            // Hide all panels
-            const panels = document.querySelectorAll('.branch-content-panel');
-            panels.forEach(p => p.classList.add('d-none'));
-
-            // Deactivate all buttons
-            const buttons = document.querySelectorAll('.branch-tab-btn');
-            buttons.forEach(b => b.classList.remove('active'));
-
-            // Show current panel and activate current button
-            document.getElementById(branchId).classList.remove('d-none');
-            evt.currentTarget.classList.add('active');
-        }
-
-        // AI Health tool calculation logic
-        function calculateAIStats() {
-            const height = parseFloat(document.getElementById('inputHeight').value) / 100;
-            const weight = parseFloat(document.getElementById('inputWeight').value);
-
-            if (!height || !weight || height <= 0 || weight <= 0) {
-                alert('Vui lòng nhập chiều cao và cân nặng hợp lệ.');
-                return;
-            }
-
-            const bmi = (weight / (height * height)).toFixed(1);
-            document.getElementById('bmiVal').innerText = bmi;
-
-            // BMR estimate (Harris-Benedict for males as baseline)
-            const bmr = Math.round(88.362 + (13.397 * weight) + (4.799 * (height * 100)) - (5.677 * 25));
-            document.getElementById('bmrVal').innerText = `BMR dự tính: ${bmr.toLocaleString()} kcal/ngày`;
-
-            let status = 'Bình Thường';
-            let strokeOffset = 440 - (440 * 0.75); // baseline for 75%
-            
-            if (bmi < 18.5) {
-                status = 'Gầy';
-                document.getElementById('bmiVal').style.color = '#38BDF8';
-                strokeOffset = 440 - (440 * (bmi / 40));
-            } else if (bmi >= 18.5 && bmi < 25) {
-                status = 'Bình Thường';
-                document.getElementById('bmiVal').style.color = '#10B981';
-                strokeOffset = 440 - (440 * (bmi / 40));
-            } else if (bmi >= 25 && bmi < 30) {
-                status = 'Thừa Cân';
-                document.getElementById('bmiVal').style.color = '#F59E0B';
-                strokeOffset = 440 - (440 * (bmi / 40));
-            } else {
-                status = 'Béo Phì';
-                document.getElementById('bmiVal').style.color = '#EF4444';
-                strokeOffset = 440 - (440 * (bmi / 40));
-            }
-
-            document.getElementById('statusVal').innerText = `Thể trạng: ${status}`;
-            
-            const circle = document.getElementById('bmiCircle');
-            circle.style.strokeDashoffset = strokeOffset;
-        }
-
-        // Trigger initial calculation
-        calculateAIStats();
     </script>
 </body>
 
